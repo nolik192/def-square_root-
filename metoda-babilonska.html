@@ -3,125 +3,81 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Metoda babilońska · Pierwiastek kwadratowy</title>
-<meta name="description" content="Projekt: jak komputer oblicza pierwiastek kwadratowy – metoda babilońska (Herona), inne algorytmy i eksperyment porównujący wydajność z funkcją sqrt().">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2392400e'/%3E%3Ctext x='32' y='46' font-size='40' text-anchor='middle' fill='%23fffbeb' font-family='Georgia'%3E%E2%88%9A%3C/text%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Crimson+Pro:ital,wght@0,500;0,600;0,700;1,500&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<title>Metoda babilońska – pierwiastek kwadratowy</title>
+<meta name="description" content="Jak komputer oblicza pierwiastek kwadratowy – metoda babilońska (Herona), inne algorytmy i eksperyment porównujący ją z funkcją sqrt().">
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<a class="skip-link" href="#tresc">Przejdź do treści</a>
 <header class="site-header">
-  <div class="container header-inner">
-    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">√</span><span>Pierwiastek kwadratowy<small>od Babilonu do komputera</small></span></a>
-    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Pokaż menu">
-    <label for="nav-toggle" class="nav-button" aria-hidden="true"><span></span></label>
-    <nav class="site-nav" aria-label="Menu główne"><ul><li><a href="index.html">Strona główna</a></li><li><a href="historia.html">Historia</a></li><li><a href="matematyka.html">Matematyka</a></li><li><a href="metoda-babilonska.html" aria-current="page">Metoda babilońska</a></li><li><a href="inne-metody.html">Inne metody</a></li><li><a href="implementacja.html">Implementacja</a></li><li><a href="eksperyment.html">Eksperyment</a></li><li><a href="wyniki.html">Wyniki</a></li><li><a href="wnioski.html">Wnioski</a></li><li><a href="zrodla.html">Źródła</a></li></ul></nav>
-  </div>
-</header>
-<div class="page-hero"><div class="container"><span class="eyebrow">Rozdział 3</span><h1>Metoda babilońska</h1><p class="lead">Najstarszy znany algorytm obliczania pierwiastka: prosty wzór, piękna geometria i zbieżność, w której liczba poprawnych cyfr podwaja się w każdym kroku.</p></div></div>
-<main id="tresc" class="content"><div class="container">
-<div class="layout"><div class="prose-wrap">
-<div class="prose">
-<h2 id="idea">Idea geometryczna</h2>
-<p>Chcemy znaleźć bok kwadratu o polu <span class="m">S</span>. Zaczynamy od dowolnego prostokąta o tym polu: jeśli jeden bok ma długość <span class="m">x</span>, drugi musi mieć <span class="m">S/x</span>. Jeśli <span class="m">x</span> jest za duże, to <span class="m">S/x</span> jest za małe – prawdziwy pierwiastek leży <strong>pomiędzy</strong> nimi. Naturalny pomysł: nowy bok to <strong>średnia</strong> obu boków. Prostokąt staje się coraz bardziej „kwadratowy”.</p>
+<div class="wrap">
+<p class="site-title"><a href="index.html">√ Pierwiastek kwadratowy</a></p>
+<nav aria-label="Menu"><ul class="nav"><li><a href="index.html">Strona główna</a></li><li><a href="historia.html">Historia</a></li><li><a href="matematyka.html">Podstawy matematyczne</a></li><li><a href="metoda-babilonska.html" aria-current="page">Metoda babilońska</a></li><li><a href="inne-metody.html">Inne metody</a></li><li><a href="implementacja.html">Implementacja</a></li><li><a href="eksperyment.html">Eksperyment</a></li><li><a href="wyniki.html">Wyniki</a></li><li><a href="wnioski.html">Wnioski</a></li><li><a href="zrodla.html">Źródła</a></li></ul></nav>
 </div>
-<figure class="diagram">
-<svg viewBox="0 0 760 275" role="img" aria-label="Trzy prostokąty o polu 16: 8 na 2, 5 na 3,2 oraz 4,1 na 3,9 – coraz bliższe kwadratowi 4 na 4">
-<g transform="translate(20,30)">
-<rect class="r0" x="0" y="140" width="256" height="64" rx="3" stroke-width="2"/>
-<text class="t" x="0" y="-8">x₀ = 8</text>
-<text x="0" y="12">prostokąt 8 × 2</text>
-<text x="128" y="228" text-anchor="middle">8</text>
-<text x="266" y="178">2</text>
-</g>
-<g transform="translate(320,30)">
-<rect class="r1" x="0" y="100" width="160" height="104" rx="3" stroke-width="2"/>
-<text class="t" x="0" y="-8">x₁ = (8 + 2)/2 = 5</text>
-<text x="0" y="12">prostokąt 5 × 3,2</text>
-<text x="80" y="228" text-anchor="middle">5</text>
-<text x="170" y="158">3,2</text>
-</g>
-<g transform="translate(560,30)">
-<rect class="r2" x="0" y="79" width="131" height="125" rx="3" stroke-width="2"/>
-<text class="t" x="0" y="-8">x₂ = 4,1</text>
-<text x="0" y="12">prawie kwadrat 4,1 × 3,9</text>
-<text x="65" y="228" text-anchor="middle">4,1</text>
-<text x="141" y="146">3,9</text>
+</header>
+<main class="wrap">
+<h1>Metoda babilońska</h1>
+<p class="lead">Najstarszy znany algorytm obliczania pierwiastka kwadratowego.</p>
+
+<h2>Idea</h2>
+<p>Szukamy boku kwadratu o polu <span class="m">S</span>. Weźmy prostokąt o tym polu i boku <span class="m">x</span> – drugi bok ma długość <span class="m">S/x</span>. Jeśli <span class="m">x</span> jest za duże, to <span class="m">S/x</span> jest za małe, a pierwiastek leży pomiędzy nimi. Nowym bokiem zostaje więc <strong>średnia</strong> obu boków i prostokąt staje się coraz bardziej podobny do kwadratu.</p>
+<figure>
+<svg viewBox="0 0 640 230" role="img" aria-label="Prostokąty o polu 16: 8 na 2, 5 na 3,2 oraz 4,1 na 3,9">
+<g font-family="system-ui, sans-serif" font-size="14" fill="#1f2328">
+<rect x="20" y="130" width="224" height="56" fill="#dbe4fb" stroke="#1f4fd1" stroke-width="1.5"/>
+<text x="20" y="40" font-weight="600">x₀ = 8</text><text x="20" y="60" fill="#59636e">8 × 2</text>
+<rect x="290" y="96" width="140" height="90" fill="#dbe4fb" stroke="#1f4fd1" stroke-width="1.5"/>
+<text x="290" y="40" font-weight="600">x₁ = (8 + 2) / 2 = 5</text><text x="290" y="60" fill="#59636e">5 × 3,2</text>
+<rect x="480" y="77" width="115" height="109" fill="#dbe4fb" stroke="#1f4fd1" stroke-width="1.5"/>
+<text x="480" y="40" font-weight="600">x₂ = 4,1</text><text x="480" y="60" fill="#59636e">4,1 × 3,9</text>
+<text x="132" y="208" text-anchor="middle" fill="#59636e">8</text>
+<text x="360" y="208" text-anchor="middle" fill="#59636e">5</text>
+<text x="537" y="208" text-anchor="middle" fill="#59636e">4,1</text>
 </g>
 </svg>
-<figcaption>Obliczanie √16 od przybliżenia x₀ = 8. Każdy prostokąt ma pole 16; po dwóch krokach bok różni się od 4 tylko o 0,1, a w następnym kroku – o 0,001.</figcaption>
+<figcaption>Obliczanie √16 od x₀ = 8. Każdy prostokąt ma pole 16; już w trzecim kroku bok różni się od 4 tylko o 0,001.</figcaption>
 </figure>
 
-<div class="prose">
-<h2 id="wzor">Wzór metody</h2>
-<p>Dla danej liczby <span class="m">S</span> &gt; 0 i przybliżenia początkowego <span class="m">x</span><sub>0</sub> &gt; 0 kolejne przybliżenia obliczamy według wzoru:</p>
-</div>
-<div class="formula big"><span class="m">x</span><sub>n+1</sub> = <span class="frac"><span>1</span><span>2</span></span> ( <span class="m">x</span><sub>n</sub> + <span class="frac"><span class="m">S</span><span><span class="m">x</span><sub>n</sub></span></span> )<span class="caption">metoda babilońska (Herona) – średnia arytmetyczna liczby x<sub>n</sub> i ilorazu S/x<sub>n</sub></span></div>
+<h2>Wzór</h2>
+<div class="formula"><span class="m">x</span>ₙ₊₁ = <span class="frac"><span>1</span><span>2</span></span>(<span class="m">x</span>ₙ + <span class="frac"><span class="m">S</span><span><span class="m">x</span>ₙ</span></span>)</div>
+<p>Kolejne przybliżenie to średnia arytmetyczna poprzedniego przybliżenia i ilorazu <span class="m">S</span>/<span class="m">x</span>ₙ.</p>
 
-<div class="prose">
-<h2 id="wyprowadzenie">Wyprowadzenie z metody Newtona</h2>
-<p>Pierwiastek z <span class="m">S</span> jest miejscem zerowym funkcji <span class="m">f(x) = x² − S</span>, której pochodna to <span class="m">f ′(x) = 2x</span>. Wstawiamy to do wzoru Newtona:</p>
-<div class="formula"><span class="m">x</span><sub>n+1</sub> = <span class="m">x</span><sub>n</sub> − <span class="frac"><span><span class="m">x</span><sub>n</sub>² − <span class="m">S</span></span><span>2<span class="m">x</span><sub>n</sub></span></span> = <span class="frac"><span>2<span class="m">x</span><sub>n</sub>² − <span class="m">x</span><sub>n</sub>² + <span class="m">S</span></span><span>2<span class="m">x</span><sub>n</sub></span></span> = <span class="frac"><span>1</span><span>2</span></span>(<span class="m">x</span><sub>n</sub> + <span class="frac"><span class="m">S</span><span><span class="m">x</span><sub>n</sub></span></span>)</div>
-<p>Babilończycy odkryli więc – bez rachunku różniczkowego – szczególny przypadek metody Newtona, którą sformułowano ponad 3000 lat później.</p>
+<h2>Wyprowadzenie z metody Newtona</h2>
+<p>Dla <span class="m">f</span>(<span class="m">x</span>) = <span class="m">x</span>² − <span class="m">S</span> mamy <span class="m">f</span> ′(<span class="m">x</span>) = 2<span class="m">x</span>, więc:</p>
+<div class="formula"><span class="m">x</span>ₙ₊₁ = <span class="m">x</span>ₙ − <span class="frac"><span><span class="m">x</span>ₙ² − <span class="m">S</span></span><span>2<span class="m">x</span>ₙ</span></span> = <span class="frac"><span><span class="m">x</span>ₙ² + <span class="m">S</span></span><span>2<span class="m">x</span>ₙ</span></span> = <span class="frac"><span>1</span><span>2</span></span>(<span class="m">x</span>ₙ + <span class="frac"><span class="m">S</span><span><span class="m">x</span>ₙ</span></span>)</div>
+<p>Metoda babilońska jest więc szczególnym przypadkiem metody Newtona, odkrytym ponad 3000 lat wcześniej.</p>
 
-<h2 id="zbieznosc">Dlaczego to działa? Dowód zbieżności</h2>
-<p>Oznaczmy błąd <span class="m">e</span><sub>n</sub> = <span class="m">x</span><sub>n</sub> − √<span class="m">S</span>. Prosty rachunek daje:</p>
-<div class="formula"><span class="m">x</span><sub>n+1</sub> − √<span class="m">S</span> = <span class="frac"><span><span class="m">x</span><sub>n</sub>² − 2<span class="m">x</span><sub>n</sub>√<span class="m">S</span> + <span class="m">S</span></span><span>2<span class="m">x</span><sub>n</sub></span></span> = <span class="frac"><span>(<span class="m">x</span><sub>n</sub> − √<span class="m">S</span>)²</span><span>2<span class="m">x</span><sub>n</sub></span></span> &nbsp;⇒&nbsp; <span class="m">e</span><sub>n+1</sub> = <span class="frac"><span><span class="m">e</span><sub>n</sub>²</span><span>2<span class="m">x</span><sub>n</sub></span></span></div>
-<p>Z tego wzoru wynikają trzy ważne własności:</p>
-<ol>
-<li><strong>Od pierwszego kroku jesteśmy nad pierwiastkiem.</strong> Prawa strona jest nieujemna, więc <span class="m">x</span><sub>n</sub> ≥ √<span class="m">S</span> dla n ≥ 1 (to także nierówność między średnią arytmetyczną a geometryczną: <span class="m">(a + b)/2 ≥ √(ab)</span>).</li>
-<li><strong>Ciąg maleje.</strong> Skoro <span class="m">x</span><sub>n</sub> ≥ √<span class="m">S</span>, to <span class="m">S/x</span><sub>n</sub> ≤ <span class="m">x</span><sub>n</sub>, więc średnia <span class="m">x</span><sub>n+1</sub> ≤ <span class="m">x</span><sub>n</sub>. Ciąg malejący i ograniczony z dołu jest zbieżny – i to do √<span class="m">S</span>.</li>
-<li><strong>Zbieżność jest kwadratowa.</strong> Błąd w kolejnym kroku jest proporcjonalny do <em>kwadratu</em> poprzedniego błędu. Jeśli błąd wynosi 10⁻⁴, to w następnym kroku będzie rzędu 10⁻⁸, potem 10⁻¹⁶. Liczba poprawnych cyfr podwaja się!</li>
-</ol>
-<p>Metoda jest zbieżna <strong>dla każdego</strong> dodatniego przybliżenia początkowego – nie trzeba się obawiać, że „ucieknie”. Od wyboru <span class="m">x</span><sub>0</sub> zależy tylko liczba kroków.</p>
-</div>
-
+<h2>Zbieżność</h2>
+<p>Po przekształceniu wzoru otrzymujemy zależność między błędami kolejnych przybliżeń:</p>
+<div class="formula"><span class="m">x</span>ₙ₊₁ − √<span class="m">S</span> = <span class="frac"><span>(<span class="m">x</span>ₙ − √<span class="m">S</span>)²</span><span>2<span class="m">x</span>ₙ</span></span></div>
+<ul>
+<li>Prawa strona jest nieujemna, więc od pierwszego kroku <span class="m">x</span>ₙ ≥ √<span class="m">S</span>, a ciąg jest malejący i ograniczony z dołu – zatem zbieżny.</li>
+<li>Błąd w kolejnym kroku jest proporcjonalny do <strong>kwadratu</strong> poprzedniego błędu: 10⁻⁴ → 10⁻⁸ → 10⁻¹⁶. Liczba poprawnych cyfr podwaja się.</li>
+<li>Metoda działa dla każdego dodatniego <span class="m">x</span>₀; od jego wyboru zależy tylko liczba kroków.</li>
+</ul>
 <figure class="chart">
-<img src="img/wykres_zbieznosc.svg" alt="Wykres błędu względnego w kolejnych iteracjach dla S = 2 i S = 12345 w skali logarytmicznej. Dla S = 2 błąd spada poniżej 10 do minus 15 po 5 krokach, dla S = 12345 po 11 krokach." width="900" height="420" loading="lazy">
-<figcaption>Błąd względny w kolejnych iteracjach (skala logarytmiczna, x₀ = S). Na początku, gdy przybliżenie jest bardzo złe, błąd maleje „tylko” o połowę na krok; gdy zbliżamy się do wyniku, spadek staje się gwałtowny – to widoczna zbieżność kwadratowa.</figcaption>
+<img src="img/wykres_zbieznosc.svg" alt="Błąd względny w kolejnych iteracjach dla S = 2 i S = 12345 w skali logarytmicznej" width="900" height="420" loading="lazy">
+<figcaption>Błąd względny w kolejnych iteracjach (x₀ = S, skala logarytmiczna). Gdy przybliżenie jest daleko od wyniku, błąd maleje o połowę na krok; blisko wyniku spada gwałtownie.</figcaption>
 </figure>
 
-<div class="prose">
-<h2 id="przyklad">Przykład: √2 na ułamkach</h2>
-<p>Zacznijmy od <span class="m">x</span><sub>0</sub> = 1. Rachunek na ułamkach zwykłych pokazuje, skąd wzięły się starożytne przybliżenia:</p>
-</div>
-<div class="table-wrap"><table>
+<h2>Przykład: √2</h2>
+<div class="table"><table>
 <thead><tr><th>n</th><th>x<sub>n</sub> (ułamek)</th><th class="num">x<sub>n</sub> (dziesiętnie)</th><th class="num">poprawne cyfry</th></tr></thead>
 <tbody>
 <tr><td>0</td><td>1</td><td class="num">1,000000000000</td><td class="num">1</td></tr>
-<tr><td>1</td><td>(1 + 2/1)/2 = 3/2</td><td class="num">1,500000000000</td><td class="num">1</td></tr>
-<tr><td>2</td><td>(3/2 + 4/3)/2 = 17/12</td><td class="num">1,416666666667</td><td class="num">3</td></tr>
+<tr><td>1</td><td>3/2</td><td class="num">1,500000000000</td><td class="num">1</td></tr>
+<tr><td>2</td><td>17/12</td><td class="num">1,416666666667</td><td class="num">3</td></tr>
 <tr><td>3</td><td>577/408</td><td class="num">1,414215686275</td><td class="num">6</td></tr>
-<tr><td>4</td><td>665 857/470 832</td><td class="num">1,414213562375</td><td class="num">12</td></tr>
-<tr><td>5</td><td>886 731 088 897/627 013 566 048</td><td class="num">1,414213562373</td><td class="num">≥ 16</td></tr>
+<tr><td>4</td><td>665857/470832</td><td class="num">1,414213562375</td><td class="num">12</td></tr>
+<tr><td>5</td><td>886731088897/627013566048</td><td class="num">1,414213562373</td><td class="num">≥ 16</td></tr>
 </tbody></table></div>
 
-<div class="prose">
-<h2 id="x0">Wybór przybliżenia początkowego</h2>
-<p>W programie używamy najprostszego wyboru <span class="m">x</span><sub>0</sub> = <span class="m">S</span>. Jest poprawny dla każdego <span class="m">S</span> &gt; 0, ale dla dużych liczb daleki od wyniku – przez pierwsze kroki przybliżenie tylko maleje mniej więcej o połowę. Dla <span class="m">S</span> = 1 000 000 potrzeba 16 iteracji, choć przy <span class="m">x</span><sub>0</sub> = 1024 wystarczyłyby 4. Biblioteki matematyczne wykorzystują zapis liczby w pamięci (wykładnik), aby od razu zacząć blisko wyniku.</p>
+<h2>Warunek zakończenia</h2>
+<p>Obliczenia kończymy, gdy dwa kolejne przybliżenia różnią się o mniej niż zadana dokładność. Zgodnie z <a href="matematyka.html">podstawami matematycznymi</a> stosujemy warunek względny:</p>
+<div class="formula">|<span class="m">x</span>ₙ₊₁ − <span class="m">x</span>ₙ| ≤ ε · <span class="m">x</span>ₙ₊₁, &emsp; ε = 10⁻¹⁵</div>
+<p>W programie przyjmujemy najprostsze przybliżenie początkowe <span class="m">x</span>₀ = <span class="m">S</span>. Dla dużych liczb wymaga ono więcej kroków (dla <span class="m">S</span> = 1 000 000 – 16 iteracji), ale zawsze prowadzi do wyniku.</p>
 
-<h2 id="stop">Warunek zakończenia</h2>
-<p>Iteracje kończymy, gdy dwa kolejne przybliżenia różnią się mniej niż o zadaną dokładność. Aby wynik miał 15 cyfr dokładności, a pętla zawsze się kończyła (patrz <a href="matematyka.html#double">liczby double</a>), stosujemy warunek względny:</p>
-<div class="formula">|<span class="m">x</span><sub>n+1</sub> − <span class="m">x</span><sub>n</sub>| ≤ ε · <span class="m">x</span><sub>n+1</sub>, &emsp; ε = 10<sup>−15</sup></div>
-
-<h2 id="algorytm">Algorytm w punktach</h2>
-<ol>
-<li>Wczytaj liczbę <span class="m">S</span> ≥ 0. Jeśli <span class="m">S</span> = 0, zwróć 0.</li>
-<li>Przyjmij <span class="m">x</span> = <span class="m">S</span>.</li>
-<li>Oblicz <span class="m">x</span><sub>nowe</sub> = (<span class="m">x</span> + <span class="m">S</span>/<span class="m">x</span>) / 2.</li>
-<li>Jeśli |<span class="m">x</span> − <span class="m">x</span><sub>nowe</sub>| ≤ ε·<span class="m">x</span><sub>nowe</sub>, zwróć <span class="m">x</span><sub>nowe</sub> i zakończ.</li>
-<li>W przeciwnym razie podstaw <span class="m">x</span> = <span class="m">x</span><sub>nowe</sub> i wróć do kroku 3.</li>
-</ol>
-<p>Gotowe implementacje w pseudokodzie, Pythonie, C++ i Excelu znajdziesz w rozdziale <a href="implementacja.html">Implementacja</a>.</p>
-</div>
-<nav class="pager" aria-label="Kolejne rozdziały"><a class="prev" href="matematyka.html"><small>← Poprzedni</small><span>Podstawy matematyczne</span></a><a class="next" href="inne-metody.html"><small>Następny →</small><span>Inne metody</span></a></nav></div><aside class="toc" aria-label="Spis treści"><p>Na tej stronie</p><ol><li><a href="#idea">Idea geometryczna</a></li><li><a href="#wzor">Wzór</a></li><li><a href="#wyprowadzenie">Wyprowadzenie</a></li><li><a href="#zbieznosc">Dowód zbieżności</a></li><li><a href="#przyklad">Przykład √2</a></li><li><a href="#x0">Przybliżenie początkowe</a></li><li><a href="#stop">Warunek zakończenia</a></li><li><a href="#algorytm">Algorytm</a></li></ol></aside></div>
-</div></main>
-<footer class="site-footer"><div class="container">
-<span>Projekt indywidualny: „Jak komputer oblicza pierwiastek kwadratowy?” · 2026</span>
-<span>HTML + CSS · programy w Pythonie · <a href="zrodla.html">źródła</a></span>
-</div></footer>
+<nav class="pager" aria-label="Kolejne strony"><a class="prev" href="matematyka.html">← Podstawy matematyczne</a><a class="next" href="inne-metody.html">Inne metody →</a></nav>
+</main>
+<footer class="site-footer"><div class="wrap">Projekt indywidualny · 2026 · strona w HTML i CSS, programy w Pythonie</div></footer>
 </body>
 </html>

@@ -14,15 +14,15 @@ import matplotlib.pyplot as plt
 TU = os.path.dirname(os.path.abspath(__file__))
 IMG = os.path.join(TU, "..", "img")
 NIEBIESKI, POMARANCZOWY = "#2a78d6", "#eb6834"
-TEKST, TEKST2, SIATKA = "#1d1b17", "#5b5850", "#e4e0d6"
+TEKST, TEKST2, SIATKA = "#1f2328", "#59636e", "#d8dee4"
 
 plt.rcParams.update({
     "font.family": "DejaVu Sans", "font.size": 11, "text.color": TEKST,
     "axes.edgecolor": SIATKA, "axes.labelcolor": TEKST2, "axes.spines.top": False,
     "axes.spines.right": False, "axes.grid": True, "axes.grid.axis": "y",
     "grid.color": SIATKA, "grid.linewidth": 0.8, "xtick.color": TEKST2,
-    "ytick.color": TEKST2, "svg.fonttype": "none", "figure.facecolor": "none",
-    "axes.facecolor": "none",
+    "ytick.color": TEKST2, "svg.fonttype": "none", "figure.facecolor": "white",
+    "axes.facecolor": "white",
 })
 
 
