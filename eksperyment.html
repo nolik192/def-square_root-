@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eksperyment · Pierwiastek kwadratowy</title>
+<meta name="description" content="Projekt: jak komputer oblicza pierwiastek kwadratowy – metoda babilońska (Herona), inne algorytmy i eksperyment porównujący wydajność z funkcją sqrt().">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2392400e'/%3E%3Ctext x='32' y='46' font-size='40' text-anchor='middle' fill='%23fffbeb' font-family='Georgia'%3E%E2%88%9A%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Crimson+Pro:ital,wght@0,500;0,600;0,700;1,500&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#tresc">Przejdź do treści</a>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">√</span><span>Pierwiastek kwadratowy<small>od Babilonu do komputera</small></span></a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Pokaż menu">
+    <label for="nav-toggle" class="nav-button" aria-hidden="true"><span></span></label>
+    <nav class="site-nav" aria-label="Menu główne"><ul><li><a href="index.html">Strona główna</a></li><li><a href="historia.html">Historia</a></li><li><a href="matematyka.html">Matematyka</a></li><li><a href="metoda-babilonska.html">Metoda babilońska</a></li><li><a href="inne-metody.html">Inne metody</a></li><li><a href="implementacja.html">Implementacja</a></li><li><a href="eksperyment.html" aria-current="page">Eksperyment</a></li><li><a href="wyniki.html">Wyniki</a></li><li><a href="wnioski.html">Wnioski</a></li><li><a href="zrodla.html">Źródła</a></li></ul></nav>
+  </div>
+</header>
+<div class="page-hero"><div class="container"><span class="eyebrow">Rozdział 6</span><h1>Eksperyment</h1><p class="lead">Jak zmierzyć, która metoda jest szybsza? Opis stanowiska, programu pomiarowego i zasad, które sprawiają, że porównanie jest uczciwe.</p></div></div>
+<main id="tresc" class="content"><div class="container">
+<div class="layout"><div class="prose-wrap">
+<div class="prose">
+<h2 id="cel">Cel i pytanie badawcze</h2>
+<p>Ile czasu zajmuje obliczenie pierwiastków wszystkich liczb całkowitych od 1 do 1 000 000 za pomocą:</p>
+<ol><li>funkcji bibliotecznej <code>math.sqrt()</code>,</li>
+<li>własnej funkcji realizującej metodę babilońską z dokładnością do 15 cyfr (ε = 10⁻¹⁵)?</li></ol>
+<p>Dodatkowo sprawdzamy, czy obie metody dają te same wyniki i ile iteracji potrzebuje metoda babilońska.</p>
+
+<h2 id="hipoteza">Hipoteza</h2>
+<p>Funkcja biblioteczna będzie znacznie szybsza, ponieważ jest napisana w języku C i wykonywana jako pojedyncza instrukcja procesora, a metoda babilońska w Pythonie wymaga kilkunastu iteracji, z których każda składa się z kilku interpretowanych operacji. Spodziewamy się różnicy co najmniej jednego rzędu wielkości (≥ 10 razy).</p>
+
+<h2 id="stanowisko">Stanowisko badawcze</h2>
+</div>
+<div class="table-wrap"><table>
+<tbody>
+<tr><th>Język</th><td>Python 3.11.15 (CPython)</td></tr>
+<tr><th>System operacyjny</th><td>Linux x86_64 (maszyna wirtualna, 4 rdzenie)</td></tr>
+<tr><th>Pomiar czasu</th><td><code>time.perf_counter()</code> – zegar o najwyższej dostępnej rozdzielczości</td></tr>
+<tr><th>Zakres danych</th><td>liczby całkowite 1, 2, …, 1 000 000</td></tr>
+<tr><th>Liczba powtórzeń</th><td>5 pomiarów każdej metody (naprzemiennie)</td></tr>
+<tr><th>Dokładność metody babilońskiej</th><td>ε = 10⁻¹⁵ (warunek względny), x₀ = S</td></tr>
+</tbody></table></div>
+
+<div class="prose">
+<h2 id="metodyka">Metodyka – jak zapewnić uczciwe porównanie</h2>
+<ul>
+<li><strong>Identyczne pętle.</strong> Obie serie mają tę samą budowę: pętla <code>for</code> po liczbach 1…1 000 000 i sumowanie wyników. Różni się tylko wywoływana funkcja, więc różnica czasów wynika z samej metody liczenia pierwiastka.</li>
+<li><strong>Mierzymy całą serię</strong>, a nie pojedyncze wywołanie – czas jednego obliczenia (nanosekundy) jest zbyt krótki, by zmierzyć go wiarygodnie.</li>
+<li><strong>Wyniki są wykorzystywane</strong> (sumowane i wypisywane jako suma kontrolna), więc nie można ich pominąć, a przy okazji sprawdzamy, czy obie metody liczą to samo.</li>
+<li><strong>Pięć powtórzeń</strong> wykonywanych naprzemiennie (sqrt, babilońska, sqrt, …) ogranicza wpływ chwilowego obciążenia komputera; wynik końcowy to średnia arytmetyczna.</li>
+<li>Funkcję zapisujemy w zmiennej lokalnej (<code>f = math.sqrt</code>), aby w obu przypadkach wywołanie kosztowało tyle samo.</li>
+</ul>
+
+<h2 id="program">Program pomiarowy</h2>
+<p>Najważniejszy fragment pliku <code>program/benchmark.py</code> (pełny kod zawiera też kontrolę dokładności i zapis wyników do plików CSV i JSON):</p>
+</div>
+<figure class="code"><figcaption class="code-head"><span>program/benchmark.py – fragment</span><span class="lang">Python</span></figcaption><pre><code>N = <span class="tok-n">1_000_000</span>
+PROBY = <span class="tok-n">5</span>
+
+
+<span class="tok-k">def</span> <span class="tok-f">seria_sqrt</span>():
+    f = math.sqrt
+    suma = <span class="tok-n">0.0</span>
+    <span class="tok-k">for</span> n <span class="tok-k">in</span> <span class="tok-f">range</span>(<span class="tok-n">1</span>, N + <span class="tok-n">1</span>):
+        suma += <span class="tok-f">f</span>(n)
+    <span class="tok-k">return</span> suma
+
+
+<span class="tok-k">def</span> <span class="tok-f">seria_babilonska</span>():
+    f = sqrt_babylonian
+    suma = <span class="tok-n">0.0</span>
+    <span class="tok-k">for</span> n <span class="tok-k">in</span> <span class="tok-f">range</span>(<span class="tok-n">1</span>, N + <span class="tok-n">1</span>):
+        suma += <span class="tok-f">f</span>(n)
+    <span class="tok-k">return</span> suma
+
+
+<span class="tok-k">def</span> <span class="tok-f">zmierz</span>(funkcja):
+    start = time.<span class="tok-f">perf_counter</span>()
+    suma = <span class="tok-f">funkcja</span>()
+    <span class="tok-k">return</span> time.<span class="tok-f">perf_counter</span>() - start, suma</code></pre></figure>
+
+<div class="prose">
+<h2 id="uruchomienie">Jak powtórzyć eksperyment</h2>
+</div>
+<figure class="code output"><figcaption class="code-head"><span>terminal</span><span class="lang">bash</span></figcaption><pre><code>cd program
+python3 benchmark.py        # pomiary -&gt; wyniki/wyniki_python.csv i .json
+pip install matplotlib openpyxl
+python3 wykresy.py          # wykresy -&gt; img/*.svg, img/*.png
+python3 excel_generator.py  # arkusz -&gt; excel/metoda_babilonska.xlsx</code></pre></figure>
+<div class="prose"><p>Czasy na innym komputerze będą inne (zależą od procesora i wersji Pythona), ale <strong>stosunek</strong> czasów obu metod powinien być podobny.</p></div>
+<nav class="pager" aria-label="Kolejne rozdziały"><a class="prev" href="implementacja.html"><small>← Poprzedni</small><span>Implementacja</span></a><a class="next" href="wyniki.html"><small>Następny →</small><span>Wyniki</span></a></nav></div><aside class="toc" aria-label="Spis treści"><p>Na tej stronie</p><ol><li><a href="#cel">Cel</a></li><li><a href="#hipoteza">Hipoteza</a></li><li><a href="#stanowisko">Stanowisko</a></li><li><a href="#metodyka">Metodyka</a></li><li><a href="#program">Program</a></li><li><a href="#uruchomienie">Uruchomienie</a></li></ol></aside></div>
+</div></main>
+<footer class="site-footer"><div class="container">
+<span>Projekt indywidualny: „Jak komputer oblicza pierwiastek kwadratowy?” · 2026</span>
+<span>HTML + CSS · programy w Pythonie · <a href="zrodla.html">źródła</a></span>
+</div></footer>
+</body>
+</html>

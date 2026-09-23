@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Implementacja · Pierwiastek kwadratowy</title>
+<meta name="description" content="Projekt: jak komputer oblicza pierwiastek kwadratowy – metoda babilońska (Herona), inne algorytmy i eksperyment porównujący wydajność z funkcją sqrt().">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2392400e'/%3E%3Ctext x='32' y='46' font-size='40' text-anchor='middle' fill='%23fffbeb' font-family='Georgia'%3E%E2%88%9A%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Crimson+Pro:ital,wght@0,500;0,600;0,700;1,500&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#tresc">Przejdź do treści</a>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">√</span><span>Pierwiastek kwadratowy<small>od Babilonu do komputera</small></span></a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Pokaż menu">
+    <label for="nav-toggle" class="nav-button" aria-hidden="true"><span></span></label>
+    <nav class="site-nav" aria-label="Menu główne"><ul><li><a href="index.html">Strona główna</a></li><li><a href="historia.html">Historia</a></li><li><a href="matematyka.html">Matematyka</a></li><li><a href="metoda-babilonska.html">Metoda babilońska</a></li><li><a href="inne-metody.html">Inne metody</a></li><li><a href="implementacja.html" aria-current="page">Implementacja</a></li><li><a href="eksperyment.html">Eksperyment</a></li><li><a href="wyniki.html">Wyniki</a></li><li><a href="wnioski.html">Wnioski</a></li><li><a href="zrodla.html">Źródła</a></li></ul></nav>
+  </div>
+</header>
+<div class="page-hero"><div class="container"><span class="eyebrow">Rozdział 5</span><h1>Implementacja</h1><p class="lead">Metoda babilońska krok po kroku: pseudokod, kod w Pythonie i C++, wynik działania programu oraz arkusz kalkulacyjny Excel.</p></div></div>
+<main id="tresc" class="content"><div class="container">
+<div class="layout"><div class="prose-wrap">
+<div class="prose">
+<h2 id="pseudokod">Pseudokod</h2>
+<p>Pseudokod opisuje algorytm niezależnie od języka programowania. Strzałka ← oznacza przypisanie wartości.</p>
+</div>
+<figure class="code"><figcaption class="code-head"><span>Metoda babilońska</span><span class="lang">Pseudokod</span></figcaption><pre><code><span class="tok-k">FUNKCJA</span> <span class="tok-f">pierwiastek_babilonski</span>(S, eps = <span class="tok-n">10</span>⁻¹⁵)
+    <span class="tok-k">JEŻELI</span> S &lt; <span class="tok-n">0</span> <span class="tok-k">WTEDY</span> <span class="tok-k">BŁĄD</span> „liczba ujemna”
+    <span class="tok-k">JEŻELI</span> S = <span class="tok-n">0</span> <span class="tok-k">WTEDY</span> <span class="tok-k">ZWRÓĆ</span> <span class="tok-n">0</span>
+    x ← S                                  <span class="tok-c">// przybliżenie początkowe</span>
+    <span class="tok-k">POWTARZAJ</span>
+        x_nowe ← (x + S / x) / <span class="tok-n">2</span>           <span class="tok-c">// średnia z x i S/x</span>
+        <span class="tok-k">JEŻELI</span> |x − x_nowe| ≤ eps · x_nowe <span class="tok-k">WTEDY</span>
+            <span class="tok-k">ZWRÓĆ</span> x_nowe
+        x ← x_nowe
+    <span class="tok-k">KONIEC</span></code></pre></figure>
+
+<div class="prose">
+<h2 id="python">Python</h2>
+<p>Plik <code>program/babilonska.py</code>. Funkcja <code>sqrt_babylonian</code> jest wykorzystywana w eksperymencie, a funkcja <code>sqrt_babylonian_verbose</code> wypisuje wszystkie kolejne przybliżenia. Uruchomienie: <code>python3 babilonska.py</code>.</p>
+</div>
+<figure class="code"><figcaption class="code-head"><span>program/babilonska.py</span><span class="lang">Python</span></figcaption><pre><code><span class="tok-c">&quot;&quot;&quot;
+Metoda babilońska (metoda Herona) obliczania pierwiastka kwadratowego.
+
+Uruchomienie:  python3 babilonska.py
+&quot;&quot;&quot;</span>
+<span class="tok-k">import</span> math
+
+EPS = <span class="tok-n">1e-15</span>  <span class="tok-c"># dokładność: 15 miejsc po przecinku (błąd względny)</span>
+
+
+<span class="tok-k">def</span> <span class="tok-f">sqrt_babylonian</span>(s, eps=EPS):
+    <span class="tok-c">&quot;&quot;&quot;Zwraca przybliżenie pierwiastka z s (s &gt;= 0) metodą babilońską.&quot;&quot;&quot;</span>
+    <span class="tok-k">if</span> s &lt; <span class="tok-n">0</span>:
+        <span class="tok-k">raise</span> ValueError(<span class="tok-s">&quot;Pierwiastek z liczby ujemnej nie istnieje w R&quot;</span>)
+    <span class="tok-k">if</span> s == <span class="tok-n">0</span>:
+        <span class="tok-k">return</span> <span class="tok-n">0.0</span>
+    x = <span class="tok-f">float</span>(s)                       <span class="tok-c"># przybliżenie początkowe x0 = S</span>
+    <span class="tok-k">while</span> <span class="tok-k">True</span>:
+        x_next = <span class="tok-n">0.5</span> * (x + s / x)     <span class="tok-c"># średnia arytmetyczna x i S/x</span>
+        <span class="tok-k">if</span> <span class="tok-f">abs</span>(x - x_next) &lt;= eps * x_next:
+            <span class="tok-k">return</span> x_next
+        x = x_next
+
+
+<span class="tok-k">def</span> <span class="tok-f">sqrt_babylonian_verbose</span>(s, eps=EPS):
+    <span class="tok-c">&quot;&quot;&quot;To samo co wyżej, ale wypisuje kolejne przybliżenia.&quot;&quot;&quot;</span>
+    x = <span class="tok-f">float</span>(s)
+    k = <span class="tok-n">0</span>
+    <span class="tok-f">print</span>(<span class="tok-s">f&quot;x{k:&lt;2} = {x:.15f}&quot;</span>)
+    <span class="tok-k">while</span> <span class="tok-k">True</span>:
+        x_next = <span class="tok-n">0.5</span> * (x + s / x)
+        k += <span class="tok-n">1</span>
+        <span class="tok-f">print</span>(<span class="tok-s">f&quot;x{k:&lt;2} = {x_next:.15f}&quot;</span>)
+        <span class="tok-k">if</span> <span class="tok-f">abs</span>(x - x_next) &lt;= eps * x_next:
+            <span class="tok-k">return</span> x_next, k
+        x = x_next
+
+
+<span class="tok-k">if</span> __name__ == <span class="tok-s">&quot;__main__&quot;</span>:
+    <span class="tok-k">for</span> s <span class="tok-k">in</span> (<span class="tok-n">2</span>, <span class="tok-n">10</span>, <span class="tok-n">12345</span>, <span class="tok-n">1000000</span>):
+        <span class="tok-f">print</span>(<span class="tok-s">f&quot;--- S = {s} ---&quot;</span>)
+        wynik, iteracje = <span class="tok-f">sqrt_babylonian_verbose</span>(s)
+        <span class="tok-f">print</span>(<span class="tok-s">f&quot;metoda babilońska: {wynik:.15f}  ({iteracje} iteracji)&quot;</span>)
+        <span class="tok-f">print</span>(<span class="tok-s">f&quot;math.sqrt():       {math.sqrt(s):.15f}&quot;</span>)
+        <span class="tok-f">print</span>(<span class="tok-s">f&quot;różnica:           {abs(wynik - math.sqrt(s)):.3e}\n&quot;</span>)</code></pre></figure>
+
+<div class="prose"><h3 id="wynik-python">Wynik działania programu</h3>
+<p>Dla <span class="m">S</span> = 2 wystarczy 6 iteracji (ostatnia jedynie potwierdza, że wartość już się nie zmienia). Różnica 2,2·10⁻¹⁶ względem <code>math.sqrt()</code> to jeden ostatni bit liczby double – szczegóły w rozdziale <a href="wyniki.html#dokladnosc">Wyniki</a>.</p></div>
+<figure class="code output"><figcaption class="code-head"><span>$ python3 babilonska.py</span><span class="lang">wyjście</span></figcaption><pre><code>--- S = 2 ---
+x0  = 2.000000000000000
+x1  = 1.500000000000000
+x2  = 1.416666666666667
+x3  = 1.414215686274510
+x4  = 1.414213562374690
+x5  = 1.414213562373095
+x6  = 1.414213562373095
+metoda babilońska: 1.414213562373095  (6 iteracji)
+math.sqrt():       1.414213562373095
+różnica:           2.220e-16
+
+…  (pełny wynik: wyniki/przyklad_python.txt)</code></pre></figure>
+<figure class="code output"><figcaption class="code-head"><span>Ten sam program dla S = 1 000 000</span><span class="lang">wyjście</span></figcaption><pre><code>--- S = 1000000 ---
+x0  = 1000000.000000000000000
+x1  = 500000.500000000000000
+x2  = 250001.249998999992386
+x3  = 125002.624989500051015
+x4  = 62505.312410752128926
+x5  = 31260.655525445279636
+x6  = 15646.322308953220272
+x7  = 7855.117545897352102
+x8  = 3991.211544161647453
+x9  = 2120.881016068179179
+x10 = 1296.191592706878509
+x11 = 1033.841239244203507
+x12 = 1000.553871053944704
+x13 = 1000.000153301662863
+x14 = 1000.000000000011823
+x15 = 1000.000000000000000
+x16 = 1000.000000000000000
+metoda babilońska: 1000.000000000000000  (16 iteracji)
+math.sqrt():       1000.000000000000000
+różnica:           0.000e+00</code></pre></figure>
+
+<div class="prose">
+<h2 id="cpp">C++</h2>
+<p>Ta sama funkcja w języku C++. Kompilacja: <code>g++ -O2 -std=c++17 babilonska.cpp -o babilonska</code>. Wynik jest identyczny jak w Pythonie, ponieważ oba języki używają tego samego typu liczb (IEEE 754 double) i tych samych operacji.</p>
+</div>
+<figure class="code"><figcaption class="code-head"><span>babilonska.cpp</span><span class="lang">C++</span></figcaption><pre><code><span class="tok-c">#include &lt;cmath&gt;</span>
+<span class="tok-c">#include &lt;cstdio&gt;</span>
+
+<span class="tok-k">const</span> <span class="tok-k">double</span> EPS = <span class="tok-n">1e-15</span>;  <span class="tok-c">// dokładność: 15 cyfr (błąd względny)</span>
+
+<span class="tok-k">double</span> <span class="tok-f">sqrt_babylonian</span>(<span class="tok-k">double</span> s) {
+    <span class="tok-k">if</span> (s &lt; <span class="tok-n">0</span>) <span class="tok-k">return</span> NAN;                 <span class="tok-c">// brak pierwiastka w R</span>
+    <span class="tok-k">if</span> (s == <span class="tok-n">0.0</span>) <span class="tok-k">return</span> <span class="tok-n">0.0</span>;
+    <span class="tok-k">double</span> x = s;                          <span class="tok-c">// przybliżenie początkowe x0 = S</span>
+    <span class="tok-k">while</span> (<span class="tok-k">true</span>) {
+        <span class="tok-k">double</span> x_next = <span class="tok-n">0.5</span> * (x + s / x); <span class="tok-c">// średnia z x i S/x</span>
+        <span class="tok-k">if</span> (std::<span class="tok-f">fabs</span>(x - x_next) &lt;= EPS * x_next) <span class="tok-k">return</span> x_next;
+        x = x_next;
+    }
+}
+
+<span class="tok-k">int</span> <span class="tok-f">main</span>() {
+    <span class="tok-k">double</span> liczby[] = {<span class="tok-n">2</span>, <span class="tok-n">10</span>, <span class="tok-n">12345</span>, <span class="tok-n">1000000</span>};
+    <span class="tok-k">for</span> (<span class="tok-k">double</span> s : liczby) {
+        std::<span class="tok-f">printf</span>(<span class="tok-s">&quot;S = %.0f\n&quot;</span>, s);
+        std::<span class="tok-f">printf</span>(<span class="tok-s">&quot;  metoda babilonska: %.15f\n&quot;</span>, <span class="tok-f">sqrt_babylonian</span>(s));
+        std::<span class="tok-f">printf</span>(<span class="tok-s">&quot;  std::sqrt():       %.15f\n&quot;</span>, std::<span class="tok-f">sqrt</span>(s));
+    }
+    <span class="tok-k">return</span> <span class="tok-n">0</span>;
+}</code></pre></figure>
+<figure class="code output"><figcaption class="code-head"><span>$ ./babilonska</span><span class="lang">wyjście</span></figcaption><pre><code>S = 2
+  metoda babilonska: 1.414213562373095
+  std::sqrt():       1.414213562373095
+S = 10
+  metoda babilonska: 3.162277660168379
+  std::sqrt():       3.162277660168380
+S = 12345
+  metoda babilonska: 111.108055513540506
+  std::sqrt():       111.108055513540506
+S = 1000000
+  metoda babilonska: 1000.000000000000000
+  std::sqrt():       1000.000000000000000</code></pre></figure>
+
+<div class="prose">
+<h2 id="excel">Arkusz kalkulacyjny (Excel)</h2>
+<p>Metodę babilońską łatwo zrealizować w arkuszu: każdy wiersz to jedna iteracja, a formuła odwołuje się do komórki powyżej. Gotowy plik: <a href="excel/metoda_babilonska.xlsx"><strong>metoda_babilonska.xlsx</strong></a> (utworzony skryptem <code>program/excel_generator.py</code>). Zmień liczbę w komórce <strong>B3</strong>, a cała tabela przeliczy się automatycznie.</p>
+
+<h3 id="excel-kroki">Jak zbudować arkusz samodzielnie</h3>
+<ol>
+<li>W komórce <code>B3</code> wpisz liczbę <span class="m">S</span> (np. 2), w <code>B4</code> przybliżenie początkowe <code>=B3</code>, w <code>B5</code> dokładność <code>1E-15</code>.</li>
+<li>W wierszu 8 wpisz nagłówki: <em>n, x(n), x(n)², S/x(n), |x(n) − x(n−1)|, błąd, koniec?</em></li>
+<li>W <code>A9</code> wpisz 0, w <code>B9</code> formułę <code>=B4</code>.</li>
+<li>W <code>B10</code> wpisz formułę metody babilońskiej <code>=(B9+$B$3/B9)/2</code> – znak <code>$</code> blokuje odwołanie do liczby <span class="m">S</span>.</li>
+<li>Dopisz pozostałe kolumny (tabela poniżej) i skopiuj wiersz 10 w dół, przeciągając uchwyt wypełnienia.</li>
+<li>Ustaw format liczb z 15 miejscami po przecinku (<em>Formatuj komórki → Liczbowe → 15</em>).</li>
+</ol>
+</div>
+
+<div class="table-wrap"><table>
+<caption>Formuły w wierszu 10 (w polskiej wersji Excela nazwy funkcji są przetłumaczone)</caption>
+<thead><tr><th>Komórka</th><th>Formuła (Excel PL)</th><th>Formuła (Excel EN)</th><th>Znaczenie</th></tr></thead>
+<tbody>
+<tr><td>B10</td><td><code>=(B9+$B$3/B9)/2</code></td><td><code>=(B9+$B$3/B9)/2</code></td><td>kolejne przybliżenie</td></tr>
+<tr><td>C10</td><td><code>=B10^2</code></td><td><code>=B10^2</code></td><td>kontrola: kwadrat ≈ S</td></tr>
+<tr><td>D10</td><td><code>=$B$3/B10</code></td><td><code>=$B$3/B10</code></td><td>drugi bok prostokąta</td></tr>
+<tr><td>E10</td><td><code>=MODUŁ.LICZBY(B10-B9)</code></td><td><code>=ABS(B10-B9)</code></td><td>zmiana przybliżenia</td></tr>
+<tr><td>F10</td><td><code>=MODUŁ.LICZBY(B10-PIERWIASTEK($B$3))</code></td><td><code>=ABS(B10-SQRT($B$3))</code></td><td>błąd względem funkcji wbudowanej</td></tr>
+<tr><td>G10</td><td><code>=JEŻELI(E10&lt;=$B$5*B10;"tak";"nie")</code></td><td><code>=IF(E10&lt;=$B$5*B10,"tak","nie")</code></td><td>czy spełniono warunek stopu</td></tr>
+<tr><td>E4</td><td><code>=LICZ.JEŻELI(G10:G28;"nie")+1</code></td><td><code>=COUNTIF(G10:G28,"nie")+1</code></td><td>liczba iteracji</td></tr>
+</tbody></table></div>
+
+<div class="table-wrap"><table class="excel">
+<caption>Podgląd arkusza dla S = 2, x₀ = 2 (wiersze 9–15)</caption>
+<thead><tr><th class="rh"></th><th>A: n</th><th>B: x(n)</th><th>C: x(n)^2</th><th>E: |x(n) − x(n−1)|</th><th>F: błąd</th><th>G: koniec?</th></tr></thead>
+<tbody><tr><td class="rh">9</td><td>0</td><td>2,000000000000000</td><td>4,000000000000000</td><td></td><td>5,86E-01</td><td></td></tr><tr><td class="rh">10</td><td>1</td><td>1,500000000000000</td><td>2,250000000000000</td><td>5,00E-01</td><td>8,58E-02</td><td>nie</td></tr><tr><td class="rh">11</td><td>2</td><td>1,416666666666667</td><td>2,006944444444444</td><td>8,33E-02</td><td>2,45E-03</td><td>nie</td></tr><tr><td class="rh">12</td><td>3</td><td>1,414215686274510</td><td>2,000006007304882</td><td>2,45E-03</td><td>2,12E-06</td><td>nie</td></tr><tr><td class="rh">13</td><td>4</td><td>1,414213562374690</td><td>2,000000000004511</td><td>2,12E-06</td><td>1,59E-12</td><td>nie</td></tr><tr><td class="rh">14</td><td>5</td><td>1,414213562373095</td><td>2,000000000000000</td><td>1,59E-12</td><td>2,22E-16</td><td>nie</td></tr><tr><td class="rh">15</td><td>6</td><td>1,414213562373095</td><td>2,000000000000000</td><td>0,00E+00</td><td>2,22E-16</td><td>tak</td></tr></tbody></table></div>
+
+<div class="prose">
+<div class="note"><span class="note-title">Uwaga o dokładności Excela</span>
+<p>Excel również używa liczb double, ale <strong>wyświetla najwyżej 15 cyfr znaczących</strong> – dalsze cyfry zastępuje zerami. Dlatego wyniki w arkuszu dla liczb ≥ 10 mogą wyglądać na mniej dokładne niż w Pythonie, choć obliczenia są takie same. W drugim arkuszu pliku („Wiele liczb”) obliczono jednocześnie pierwiastki z 2, 3, 10, 100, 12345 i 1 000 000.</p></div>
+</div>
+<nav class="pager" aria-label="Kolejne rozdziały"><a class="prev" href="inne-metody.html"><small>← Poprzedni</small><span>Inne metody</span></a><a class="next" href="eksperyment.html"><small>Następny →</small><span>Eksperyment</span></a></nav></div><aside class="toc" aria-label="Spis treści"><p>Na tej stronie</p><ol><li><a href="#pseudokod">Pseudokod</a></li><li><a href="#python">Python</a></li><li><a href="#wynik-python">Wynik programu</a></li><li><a href="#cpp">C++</a></li><li><a href="#excel">Excel</a></li><li><a href="#excel-kroki">Budowa arkusza</a></li></ol></aside></div>
+</div></main>
+<footer class="site-footer"><div class="container">
+<span>Projekt indywidualny: „Jak komputer oblicza pierwiastek kwadratowy?” · 2026</span>
+<span>HTML + CSS · programy w Pythonie · <a href="zrodla.html">źródła</a></span>
+</div></footer>
+</body>
+</html>

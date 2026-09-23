@@ -1,0 +1,13 @@
+Python 3.11.15 | x86_64
+Próba       sqrt() [s]    babilońska [s]
+1               0.0347            1.0112
+2               0.0337            1.0353
+3               0.0342            1.0255
+4               0.0369            1.0123
+5               0.0348            1.0582
+Średnia         0.0349            1.0285
+Metoda babilońska jest 29.5x wolniejsza
+Kontrola: suma sqrt = 666667166.458842, suma bab. = 666667166.458842
+Maks. błąd bezwzględny: 1.137e-13
+Maks. błąd względny:    2.220e-16
+Wyniki identyczne bit w bit: 750888 / 1000000

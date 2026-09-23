@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wyniki · Pierwiastek kwadratowy</title>
+<meta name="description" content="Projekt: jak komputer oblicza pierwiastek kwadratowy – metoda babilońska (Herona), inne algorytmy i eksperyment porównujący wydajność z funkcją sqrt().">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2392400e'/%3E%3Ctext x='32' y='46' font-size='40' text-anchor='middle' fill='%23fffbeb' font-family='Georgia'%3E%E2%88%9A%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Crimson+Pro:ital,wght@0,500;0,600;0,700;1,500&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#tresc">Przejdź do treści</a>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">√</span><span>Pierwiastek kwadratowy<small>od Babilonu do komputera</small></span></a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Pokaż menu">
+    <label for="nav-toggle" class="nav-button" aria-hidden="true"><span></span></label>
+    <nav class="site-nav" aria-label="Menu główne"><ul><li><a href="index.html">Strona główna</a></li><li><a href="historia.html">Historia</a></li><li><a href="matematyka.html">Matematyka</a></li><li><a href="metoda-babilonska.html">Metoda babilońska</a></li><li><a href="inne-metody.html">Inne metody</a></li><li><a href="implementacja.html">Implementacja</a></li><li><a href="eksperyment.html">Eksperyment</a></li><li><a href="wyniki.html" aria-current="page">Wyniki</a></li><li><a href="wnioski.html">Wnioski</a></li><li><a href="zrodla.html">Źródła</a></li></ul></nav>
+  </div>
+</header>
+<div class="page-hero"><div class="container"><span class="eyebrow">Rozdział 7</span><h1>Wyniki</h1><p class="lead">Pięć pomiarów serii miliona obliczeń, średnie czasy, dokładność obu metod oraz wykresy.</p></div></div>
+<main id="tresc" class="content"><div class="container">
+<div class="layout"><div class="prose-wrap">
+<div class="prose">
+<h2 id="tabela">Tabela pomiarów</h2>
+<p>Czas wykonania całej serii 1 000 000 obliczeń pierwiastka (liczby 1…1 000 000), pięć prób:</p>
+</div>
+<div class="table-wrap"><table>
+<caption>Czas obliczenia pierwiastków liczb 1…1 000 000 (Python 3.11.15)</caption>
+<thead><tr><th>Próba</th><th class="num"><span class="swatch blue"></span>sqrt()</th><th class="num"><span class="swatch orange"></span>Metoda babilońska</th></tr></thead>
+<tbody><tr><td>1</td><td class="num">0,0347 s</td><td class="num">1,0112 s</td></tr><tr><td>2</td><td class="num">0,0337 s</td><td class="num">1,0353 s</td></tr><tr><td>3</td><td class="num">0,0342 s</td><td class="num">1,0255 s</td></tr><tr><td>4</td><td class="num">0,0369 s</td><td class="num">1,0123 s</td></tr><tr><td>5</td><td class="num">0,0348 s</td><td class="num">1,0582 s</td></tr><tr class="total"><td>Średnia</td><td class="num">0,0349 s</td><td class="num">1,0285 s</td></tr></tbody>
+</table></div>
+
+<div class="stats">
+<div class="stat accent"><div class="value">29,5×</div><div class="label">metoda babilońska jest średnio tyle razy wolniejsza od <code>math.sqrt()</code></div></div>
+<div class="stat"><div class="value">34,9 ms</div><div class="label">średnio <code>sqrt()</code> ⇒ ok. 35 ns na jedną liczbę (razem z pętlą)</div></div>
+<div class="stat"><div class="value">1029 ms</div><div class="label">średnio metoda babilońska ⇒ ok. 1,03 µs na jedną liczbę</div></div>
+<div class="stat"><div class="value">± 1,9 %</div><div class="label">rozrzut pomiarów metody babilońskiej (odchylenie std.); dla sqrt(): ± 3,5 %</div></div>
+</div>
+
+<figure class="chart">
+<img src="img/wykres_czasy.svg" alt="Wykres słupkowy czasów pięciu prób i średniej. math.sqrt około 0,035 s w każdej próbie, metoda babilońska od 1,011 do 1,058 s, średnio 1,029 s." width="900" height="460">
+<figcaption><span class="swatch blue"></span>math.sqrt() &nbsp; <span class="swatch orange"></span>metoda babilońska — czas serii miliona obliczeń w pięciu próbach i średnia. Słupki funkcji bibliotecznej są niemal niewidoczne: jej czas stanowi ok. 3,4 % czasu metody babilońskiej.</figcaption>
+</figure>
+
+<div class="prose">
+<h3 id="statystyka">Analiza statystyczna</h3>
+</div>
+<div class="table-wrap"><table>
+<thead><tr><th>Wielkość</th><th class="num">sqrt()</th><th class="num">Metoda babilońska</th></tr></thead>
+<tbody>
+<tr><td>Minimum</td><td class="num">0,0337 s</td><td class="num">1,0112 s</td></tr>
+<tr><td>Maksimum</td><td class="num">0,0369 s</td><td class="num">1,0582 s</td></tr>
+<tr><td>Średnia</td><td class="num">0,0349 s</td><td class="num">1,0285 s</td></tr>
+<tr><td>Odchylenie standardowe</td><td class="num">0,0012 s</td><td class="num">0,0194 s</td></tr>
+<tr><td>Średni czas na jedną liczbę</td><td class="num">34,9 ns</td><td class="num">1029 ns</td></tr>
+<tr><td>Średnia liczba iteracji</td><td class="num">–</td><td class="num">14,84</td></tr>
+</tbody></table></div>
+<div class="prose">
+<p>Pomiary są powtarzalne – kolejne próby różnią się o kilka procent, co wynika z pracy systemu operacyjnego w tle. Różnica między metodami (ok. 29 razy) jest wielokrotnie większa niż rozrzut pomiarów, więc wynik jest wiarygodny.</p>
+
+<h2 id="dokladnosc">Dokładność</h2>
+<p>Program porównał wyniki obu metod dla każdej z miliona liczb:</p>
+</div>
+<div class="table-wrap"><table>
+<tbody>
+<tr><th>Największy błąd bezwzględny</th><td class="num">1.137e-13</td></tr>
+<tr><th>Największy błąd względny</th><td class="num">2.220e-16</td></tr>
+<tr><th>Wyniki identyczne co do bitu</th><td class="num">750 888 z 1 000 000 (75,1 %)</td></tr>
+</tbody></table></div>
+<div class="prose">
+<p>Największy błąd względny 2,22·10⁻¹⁶ to dokładnie <strong>epsilon maszynowy</strong> – w najgorszym przypadku wynik metody babilońskiej różni się od poprawnie zaokrąglonego wyniku <code>sqrt()</code> tylko <strong>ostatnim bitem</strong>. Błąd bezwzględny 1,14·10⁻¹³ dotyczy wyników bliskich 1000, gdzie sąsiednie liczby double są odległe o 1,14·10⁻¹³ – mniejszej różnicy nie da się zapisać. Wymagana dokładność 15 cyfr została więc osiągnięta dla wszystkich liczb.</p>
+
+<h2 id="iteracje">Liczba iteracji</h2>
+<p>Przy przybliżeniu początkowym x₀ = S liczba iteracji rośnie wraz z wielkością liczby (mniej więcej jak log₂√S + 5). Większość liczb z zakresu jest duża, więc przeważnie potrzeba 15–16 kroków:</p>
+</div>
+<figure class="chart">
+<img src="img/wykres_iteracje.svg" alt="Histogram liczby iteracji dla liczb od 1 do miliona: 15 iteracji dla 650 578 liczb, 14 dla 162 678, 16 dla 132 533, 13 dla 40 654, mniej dla pozostałych." width="900" height="420" loading="lazy">
+<figcaption>Ile liczb z zakresu 1…1 000 000 wymagało danej liczby iteracji. Średnio 14,84 iteracji na liczbę.</figcaption>
+</figure>
+<div class="table-wrap"><table>
+<thead><tr><th class="num">Liczba iteracji</th><th class="num">Ile liczb</th><th class="num">Udział</th></tr></thead>
+<tbody><tr><td class="num">1</td><td class="num">1</td><td class="num">0,000 %</td></tr><tr><td class="num">6</td><td class="num">2</td><td class="num">0,000 %</td></tr><tr><td class="num">7</td><td class="num">10</td><td class="num">0,001 %</td></tr><tr><td class="num">8</td><td class="num">40</td><td class="num">0,004 %</td></tr><tr><td class="num">9</td><td class="num">159</td><td class="num">0,016 %</td></tr><tr><td class="num">10</td><td class="num">636</td><td class="num">0,064 %</td></tr><tr><td class="num">11</td><td class="num">2 538</td><td class="num">0,254 %</td></tr><tr><td class="num">12</td><td class="num">10 171</td><td class="num">1,017 %</td></tr><tr><td class="num">13</td><td class="num">40 654</td><td class="num">4,065 %</td></tr><tr><td class="num">14</td><td class="num">162 678</td><td class="num">16,268 %</td></tr><tr><td class="num">15</td><td class="num">650 578</td><td class="num">65,058 %</td></tr><tr><td class="num">16</td><td class="num">132 533</td><td class="num">13,253 %</td></tr></tbody></table></div>
+
+<div class="prose"><h2 id="surowe">Surowy wynik programu</h2></div>
+<figure class="code output"><figcaption class="code-head"><span>$ python3 benchmark.py</span><span class="lang">wyjście</span></figcaption><pre><code>Python 3.11.15 | x86_64
+Próba       sqrt() [s]    babilońska [s]
+1               0.0347            1.0112
+2               0.0337            1.0353
+3               0.0342            1.0255
+4               0.0369            1.0123
+5               0.0348            1.0582
+Średnia         0.0349            1.0285
+Metoda babilońska jest 29.5x wolniejsza
+Kontrola: suma sqrt = 666667166.458842, suma bab. = 666667166.458842
+Maks. błąd bezwzględny: 1.137e-13
+Maks. błąd względny:    2.220e-16
+Wyniki identyczne bit w bit: 750888 / 1000000</code></pre></figure>
+<div class="prose"><p>Dane w formie pliku: <a href="wyniki/wyniki_python.csv">wyniki_python.csv</a> · <a href="wyniki/wyniki_python.json">wyniki_python.json</a></p></div>
+<nav class="pager" aria-label="Kolejne rozdziały"><a class="prev" href="eksperyment.html"><small>← Poprzedni</small><span>Eksperyment</span></a><a class="next" href="wnioski.html"><small>Następny →</small><span>Wnioski</span></a></nav></div><aside class="toc" aria-label="Spis treści"><p>Na tej stronie</p><ol><li><a href="#tabela">Tabela pomiarów</a></li><li><a href="#statystyka">Statystyka</a></li><li><a href="#dokladnosc">Dokładność</a></li><li><a href="#iteracje">Liczba iteracji</a></li><li><a href="#surowe">Surowy wynik</a></li></ol></aside></div>
+</div></main>
+<footer class="site-footer"><div class="container">
+<span>Projekt indywidualny: „Jak komputer oblicza pierwiastek kwadratowy?” · 2026</span>
+<span>HTML + CSS · programy w Pythonie · <a href="zrodla.html">źródła</a></span>
+</div></footer>
+</body>
+</html>

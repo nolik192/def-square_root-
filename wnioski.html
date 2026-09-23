@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wnioski · Pierwiastek kwadratowy</title>
+<meta name="description" content="Projekt: jak komputer oblicza pierwiastek kwadratowy – metoda babilońska (Herona), inne algorytmy i eksperyment porównujący wydajność z funkcją sqrt().">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2392400e'/%3E%3Ctext x='32' y='46' font-size='40' text-anchor='middle' fill='%23fffbeb' font-family='Georgia'%3E%E2%88%9A%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Crimson+Pro:ital,wght@0,500;0,600;0,700;1,500&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#tresc">Przejdź do treści</a>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">√</span><span>Pierwiastek kwadratowy<small>od Babilonu do komputera</small></span></a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Pokaż menu">
+    <label for="nav-toggle" class="nav-button" aria-hidden="true"><span></span></label>
+    <nav class="site-nav" aria-label="Menu główne"><ul><li><a href="index.html">Strona główna</a></li><li><a href="historia.html">Historia</a></li><li><a href="matematyka.html">Matematyka</a></li><li><a href="metoda-babilonska.html">Metoda babilońska</a></li><li><a href="inne-metody.html">Inne metody</a></li><li><a href="implementacja.html">Implementacja</a></li><li><a href="eksperyment.html">Eksperyment</a></li><li><a href="wyniki.html">Wyniki</a></li><li><a href="wnioski.html" aria-current="page">Wnioski</a></li><li><a href="zrodla.html">Źródła</a></li></ul></nav>
+  </div>
+</header>
+<div class="page-hero"><div class="container"><span class="eyebrow">Rozdział 8</span><h1>Wnioski</h1><p class="lead">Co wynika z pomiarów i czego nauczyła nas metoda babilońska.</p></div></div>
+<main id="tresc" class="content"><div class="container">
+<div class="layout"><div class="prose-wrap">
+<div class="prose">
+<h2 id="glowne">Najważniejsze wnioski</h2>
+<ol>
+<li><strong>Funkcja biblioteczna jest znacznie szybsza.</strong> Seria miliona pierwiastków trwała średnio 0,035 s dla <code>math.sqrt()</code> i 1,029 s dla metody babilońskiej – różnica ok. <strong>29 razy</strong>. Hipoteza (różnica co najmniej 10-krotna) została potwierdzona.</li>
+<li><strong>Obie metody są tak samo dokładne w praktyce.</strong> Dla 75% liczb wyniki były identyczne co do bitu, a w pozostałych przypadkach różniły się jedynie ostatnim bitem (błąd względny ≤ 2,2·10⁻¹⁶). Wymaganie 15 cyfr dokładności zostało spełnione.</li>
+<li><strong>Wyniki są wiarygodne.</strong> Rozrzut pięciu pomiarów to kilka procent, a różnica między metodami – kilka tysięcy procent.</li>
+<li><strong>Metoda babilońska zbiega bardzo szybko.</strong> Mimo prymitywnego startu x₀ = S wystarczyło średnio 14,8 iteracji, a gdy przybliżenie jest już bliskie wyniku, liczba poprawnych cyfr podwaja się w każdym kroku.</li>
+</ol>
+
+<h2 id="dlaczego">Dlaczego sqrt() wygrywa?</h2>
+<ul>
+<li><strong>Sprzęt zamiast programu.</strong> <code>math.sqrt()</code> to funkcja napisana w C, która sprowadza się do jednej instrukcji procesora (<code>SQRTSD</code>) trwającej kilka nanosekund. Z około 35 ns zmierzonych na jedną liczbę większość to koszt samej pętli Pythona, a nie liczenia pierwiastka.</li>
+<li><strong>Interpreter.</strong> Metoda babilońska w Pythonie wykonuje ok. 15 iteracji, a każda to kilka operacji (dzielenie, dodawanie, mnożenie, odejmowanie, <code>abs</code>, porównanie) wykonywanych przez interpreter – każda operacja kosztuje dziesiątki nanosekund. Daje to ok. 994 ns dodatkowego czasu na liczbę.</li>
+<li><strong>Dobre przybliżenie początkowe.</strong> Biblioteki i sprzęt zaczynają obliczenia bardzo blisko wyniku (np. z tablicy wartości), więc potrzebują najwyżej kilku kroków, a nie 15.</li>
+</ul>
+
+<h2 id="znaczenie">Czy metoda babilońska jest więc bezużyteczna?</h2>
+<p>Wręcz przeciwnie. Ta sama idea – iteracja Newtona – działa wewnątrz wielu bibliotek matematycznych i układów scalonych. Metoda babilońska przydaje się, gdy:</p>
+<ul>
+<li>liczymy pierwiastek z liczb, dla których nie ma gotowej funkcji sprzętowej, np. z bardzo dużych liczb całkowitych (<code>math.isqrt()</code> w Pythonie korzysta z iteracji Newtona) lub z liczb o dowolnej precyzji (moduł <code>decimal</code>) – możemy dostać 100 lub 1000 cyfr √2,</li>
+<li>programujemy prosty mikrokontroler bez jednostki zmiennoprzecinkowej,</li>
+<li>chcemy zrozumieć, jak działają algorytmy numeryczne – jest krótka, łatwa do udowodnienia i pokazuje ideę zbieżności kwadratowej.</li>
+</ul>
+
+<h2 id="praktyka">Wniosek praktyczny</h2>
+<div class="note warm"><span class="note-title">W codziennym programowaniu</span>
+<p>Należy używać funkcji bibliotecznej <code>sqrt()</code>: jest ok. 29 razy szybsza, gwarantuje poprawne zaokrąglenie (norma IEEE 754), obsługuje przypadki szczególne (0, nieskończoność, liczby ujemne) i jest już przetestowana. Własną implementację warto pisać po to, by zrozumieć algorytm – albo gdy potrzeba czegoś, czego biblioteka nie oferuje.</p></div>
+
+<h2 id="czego">Czego nauczył mnie projekt</h2>
+<ul>
+<li>Matematyka sprzed prawie 4000 lat jest nadal podstawą obliczeń komputerowych.</li>
+<li>Komputer nie liczy „dokładnie” – typ double ma ok. 15–16 cyfr znaczących i trzeba to uwzględniać, np. dobierając warunek stopu (względny zamiast bezwzględnego).</li>
+<li>Rzetelny pomiar czasu wymaga powtórzeń, identycznych warunków i kontroli, czy programy liczą to samo.</li>
+<li>Szybkość programu zależy nie tylko od algorytmu, ale też od tego, gdzie jest wykonywany: w sprzęcie, w skompilowanym kodzie C, czy w interpreterze.</li>
+</ul>
+</div>
+<nav class="pager" aria-label="Kolejne rozdziały"><a class="prev" href="wyniki.html"><small>← Poprzedni</small><span>Wyniki</span></a><a class="next" href="zrodla.html"><small>Następny →</small><span>Źródła</span></a></nav></div><aside class="toc" aria-label="Spis treści"><p>Na tej stronie</p><ol><li><a href="#glowne">Najważniejsze wnioski</a></li><li><a href="#dlaczego">Dlaczego sqrt() wygrywa</a></li><li><a href="#znaczenie">Znaczenie metody</a></li><li><a href="#praktyka">Wniosek praktyczny</a></li><li><a href="#czego">Czego się nauczyłem</a></li></ol></aside></div>
+</div></main>
+<footer class="site-footer"><div class="container">
+<span>Projekt indywidualny: „Jak komputer oblicza pierwiastek kwadratowy?” · 2026</span>
+<span>HTML + CSS · programy w Pythonie · <a href="zrodla.html">źródła</a></span>
+</div></footer>
+</body>
+</html>
