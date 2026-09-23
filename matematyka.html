@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Podstawy matematyczne · Pierwiastek kwadratowy</title>
+<meta name="description" content="Projekt: jak komputer oblicza pierwiastek kwadratowy – metoda babilońska (Herona), inne algorytmy i eksperyment porównujący wydajność z funkcją sqrt().">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231f3a5f'/%3E%3Ctext x='32' y='46' font-size='40' text-anchor='middle' fill='%23f7f4ee' font-family='Georgia'%3E%E2%88%9A%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#tresc">Przejdź do treści</a>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">√</span><span>Pierwiastek kwadratowy<small>od Babilonu do komputera</small></span></a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Pokaż menu">
+    <label for="nav-toggle" class="nav-button" aria-hidden="true"><span></span></label>
+    <nav class="site-nav" aria-label="Menu główne"><ul><li><a href="index.html">Strona główna</a></li><li><a href="historia.html">Historia</a></li><li><a href="matematyka.html" aria-current="page">Matematyka</a></li><li><a href="metoda-babilonska.html">Metoda babilońska</a></li><li><a href="inne-metody.html">Inne metody</a></li><li><a href="implementacja.html">Implementacja</a></li><li><a href="eksperyment.html">Eksperyment</a></li><li><a href="wyniki.html">Wyniki</a></li><li><a href="wnioski.html">Wnioski</a></li><li><a href="zrodla.html">Źródła</a></li></ul></nav>
+  </div>
+</header>
+<div class="page-hero"><div class="container"><span class="eyebrow">Rozdział 2</span><h1>Podstawy matematyczne</h1><p class="lead">Czym jest pierwiastek kwadratowy, dlaczego zwykle nie da się go zapisać dokładnie i jak komputer przechowuje liczby rzeczywiste.</p></div></div>
+<main id="tresc" class="content"><div class="container">
+<div class="layout"><div class="prose-wrap">
+<div class="prose">
+<h2 id="definicja">Definicja pierwiastka kwadratowego</h2>
+<p>Pierwiastkiem kwadratowym z liczby nieujemnej <span class="m">S</span> nazywamy taką liczbę nieujemną <span class="m">x</span>, której kwadrat jest równy <span class="m">S</span>:</p>
+<div class="formula"><span class="sqrt">√<span class="m">S</span></span> = <span class="m">x</span> &nbsp;⇔&nbsp; <span class="m">x</span> ≥ 0 &nbsp;i&nbsp; <span class="m">x</span>² = <span class="m">S</span></div>
+<p>Geometrycznie: jest to długość boku kwadratu o polu <span class="m">S</span>. Obliczanie pierwiastka to więc rozwiązywanie równania <span class="m">x² − S = 0</span>, czyli szukanie <strong>miejsca zerowego</strong> funkcji <span class="m">f(x) = x² − S</span>. To spostrzeżenie jest kluczem do metod numerycznych.</p>
+
+<h2 id="niewymiernosc">Liczby niewymierne</h2>
+<p>Pierwiastek z liczby naturalnej, która nie jest kwadratem liczby naturalnej, jest liczbą <strong>niewymierną</strong> – ma nieskończone i nieokresowe rozwinięcie dziesiętne. Klasyczny dowód dla √2:</p>
+<ol>
+<li>Załóżmy, że √2 = <span class="m">p/q</span>, gdzie ułamek jest nieskracalny.</li>
+<li>Wtedy <span class="m">p² = 2q²</span>, więc <span class="m">p²</span> jest parzyste, a zatem <span class="m">p</span> jest parzyste: <span class="m">p = 2k</span>.</li>
+<li>Podstawiając: <span class="m">4k² = 2q²</span>, czyli <span class="m">q² = 2k²</span> – więc również <span class="m">q</span> jest parzyste.</li>
+<li>Obie liczby są parzyste, czyli ułamek dałoby się skrócić – sprzeczność. ∎</li>
+</ol>
+<p>Wniosek praktyczny: komputer <strong>nigdy</strong> nie przechowa √2 dokładnie. Może jedynie zapisać jego przybliżenie – i dlatego potrzebujemy algorytmów przybliżonych.</p>
+
+<h2 id="blad">Przybliżenie i błąd</h2>
+<p>Jeśli <span class="m">x</span> jest przybliżeniem dokładnej wartości <span class="m">a</span>, to definiujemy:</p>
+<div class="formula">Δ = |<span class="m">x</span> − <span class="m">a</span>| &emsp;&emsp; δ = <span class="frac"><span>|<span class="m">x</span> − <span class="m">a</span>|</span><span>|<span class="m">a</span>|</span></span><span class="caption">błąd bezwzględny oraz błąd względny</span></div>
+<p>Błąd względny mówi, ile <strong>cyfr znaczących</strong> jest poprawnych: δ ≈ 10⁻¹⁵ oznacza mniej więcej 15 poprawnych cyfr, niezależnie od tego, czy liczba jest rzędu 1, czy 1000.</p>
+
+<h2 id="iteracje">Metody iteracyjne i rząd zbieżności</h2>
+<p>Metoda iteracyjna zaczyna od przybliżenia początkowego <span class="m">x</span><sub>0</sub> i za pomocą ustalonego wzoru <span class="m">x</span><sub>n+1</sub> = <span class="m">g</span>(<span class="m">x</span><sub>n</sub>) tworzy ciąg coraz lepszych przybliżeń. Obliczenia przerywamy, gdy kolejne wyrazy przestają się istotnie zmieniać (<em>warunek stopu</em>).</p>
+<p>Szybkość metody opisuje <strong>rząd zbieżności</strong> <span class="m">p</span>. Jeśli <span class="m">e</span><sub>n</sub> to błąd w kroku <span class="m">n</span>, to</p>
+<div class="formula">|<span class="m">e</span><sub>n+1</sub>| ≈ <span class="m">C</span> · |<span class="m">e</span><sub>n</sub>|<sup><span class="m">p</span></sup></div>
+<ul>
+<li><strong>p = 1 (zbieżność liniowa)</strong> – w każdym kroku zyskujemy stałą liczbę cyfr, np. bisekcja zyskuje 1 bit na krok.</li>
+<li><strong>p = 2 (zbieżność kwadratowa)</strong> – liczba poprawnych cyfr w przybliżeniu <strong>podwaja się</strong> w każdym kroku. Tak działa metoda Newtona, a więc i metoda babilońska.</li>
+</ul>
+
+<h2 id="newton">Metoda Newtona (stycznych)</h2>
+<p>Aby znaleźć miejsce zerowe funkcji <span class="m">f</span>, prowadzimy styczną do wykresu w punkcie <span class="m">x</span><sub>n</sub> i jako nowe przybliżenie bierzemy punkt, w którym styczna przecina oś OX:</p>
+<div class="formula"><span class="m">x</span><sub>n+1</sub> = <span class="m">x</span><sub>n</sub> − <span class="frac"><span><span class="m">f</span>(<span class="m">x</span><sub>n</sub>)</span><span><span class="m">f</span> ′(<span class="m">x</span><sub>n</sub>)</span></span></div>
+<p>Dla pierwiastka stosujemy ją do funkcji <span class="m">f(x) = x² − S</span>. Wynik – wzór babiloński – wyprowadzamy w <a href="metoda-babilonska.html#wyprowadzenie">następnym rozdziale</a>.</p>
+
+<h2 id="double">Jak komputer przechowuje liczby rzeczywiste</h2>
+<p>Python (typ <code>float</code>) i C++ (typ <code>double</code>) używają 64-bitowego formatu <strong>IEEE 754 podwójnej precyzji</strong>:</p>
+</div>
+<div class="table-wrap"><table>
+<thead><tr><th>Część</th><th class="num">Liczba bitów</th><th>Znaczenie</th></tr></thead>
+<tbody>
+<tr><td>znak</td><td class="num">1</td><td>liczba dodatnia lub ujemna</td></tr>
+<tr><td>wykładnik</td><td class="num">11</td><td>rząd wielkości: 2<sup>−1022</sup> … 2<sup>1023</sup></td></tr>
+<tr><td>mantysa</td><td class="num">52 (+1 ukryty)</td><td>cyfry znaczące – 53 bity ≈ 15,95 cyfry dziesiętnej</td></tr>
+</tbody></table></div>
+<div class="prose">
+<p>Najważniejsza konsekwencja: liczba typu double ma <strong>około 15–17 cyfr znaczących</strong>. Odstęp między sąsiednimi liczbami double w okolicy 1 wynosi ε = 2⁻⁵² ≈ 2,22·10⁻¹⁶ (tzw. epsilon maszynowy), ale w okolicy 1000 jest już 1024 razy większy: ≈ 1,14·10⁻¹³.</p>
+<div class="note"><span class="note-title">Co to oznacza dla „15 miejsc po przecinku”?</span>
+<p>Dla √1 000 000 = 1000 nie da się w typie double osiągnąć błędu bezwzględnego 10⁻¹⁵ – takiej liczby po prostu nie można zapisać. Dlatego w programie stosujemy warunek <strong>względny</strong>: kolejne przybliżenia różnią się o mniej niż 10⁻¹⁵ swojej wartości. Dla liczb mniejszych od 10 oznacza to dokładnie 15 miejsc po przecinku, a dla większych – maksymalną dokładność, jaką oferuje typ double.</p></div>
+</div>
+<nav class="pager" aria-label="Kolejne rozdziały"><a class="prev" href="historia.html"><small>← Poprzedni</small><span>Historia</span></a><a class="next" href="metoda-babilonska.html"><small>Następny →</small><span>Metoda babilońska</span></a></nav></div><aside class="toc" aria-label="Spis treści"><p>Na tej stronie</p><ol><li><a href="#definicja">Definicja</a></li><li><a href="#niewymiernosc">Liczby niewymierne</a></li><li><a href="#blad">Błąd przybliżenia</a></li><li><a href="#iteracje">Metody iteracyjne</a></li><li><a href="#newton">Metoda Newtona</a></li><li><a href="#double">Liczby double</a></li></ol></aside></div>
+</div></main>
+<footer class="site-footer"><div class="container">
+<span>Projekt indywidualny: „Jak komputer oblicza pierwiastek kwadratowy?” · 2026</span>
+<span>HTML + CSS · programy w Pythonie · <a href="zrodla.html">źródła</a></span>
+</div></footer>
+</body>
+</html>

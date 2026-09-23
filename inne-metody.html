@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inne metody · Pierwiastek kwadratowy</title>
+<meta name="description" content="Projekt: jak komputer oblicza pierwiastek kwadratowy – metoda babilońska (Herona), inne algorytmy i eksperyment porównujący wydajność z funkcją sqrt().">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231f3a5f'/%3E%3Ctext x='32' y='46' font-size='40' text-anchor='middle' fill='%23f7f4ee' font-family='Georgia'%3E%E2%88%9A%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#tresc">Przejdź do treści</a>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">√</span><span>Pierwiastek kwadratowy<small>od Babilonu do komputera</small></span></a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Pokaż menu">
+    <label for="nav-toggle" class="nav-button" aria-hidden="true"><span></span></label>
+    <nav class="site-nav" aria-label="Menu główne"><ul><li><a href="index.html">Strona główna</a></li><li><a href="historia.html">Historia</a></li><li><a href="matematyka.html">Matematyka</a></li><li><a href="metoda-babilonska.html">Metoda babilońska</a></li><li><a href="inne-metody.html" aria-current="page">Inne metody</a></li><li><a href="implementacja.html">Implementacja</a></li><li><a href="eksperyment.html">Eksperyment</a></li><li><a href="wyniki.html">Wyniki</a></li><li><a href="wnioski.html">Wnioski</a></li><li><a href="zrodla.html">Źródła</a></li></ul></nav>
+  </div>
+</header>
+<div class="page-hero"><div class="container"><span class="eyebrow">Rozdział 4</span><h1>Inne metody</h1><p class="lead">Metoda babilońska nie jest jedyna. Przegląd innych sposobów – od bisekcji i metody pisemnej po sztuczki stosowane w grach i w samym procesorze.</p></div></div>
+<main id="tresc" class="content"><div class="container">
+<div class="layout"><div class="prose-wrap">
+<div class="prose">
+<p>Poniższe metody opisano jako uzupełnienie – dla porównania z metodą babilońską i aby pokazać, co naprawdę dzieje się wewnątrz komputera.</p>
+
+<h2 id="bisekcja">1. Metoda bisekcji (połowienia przedziału)</h2>
+<p>Wiemy, że √<span class="m">S</span> leży w przedziale [0, max(1, <span class="m">S</span>)]. Sprawdzamy środek przedziału <span class="m">c</span>: jeżeli <span class="m">c</span>² &gt; <span class="m">S</span>, pierwiastek jest w lewej połowie, w przeciwnym razie w prawej. Każdy krok zmniejsza przedział dwukrotnie.</p>
+<ul><li><strong>Zalety:</strong> bardzo prosta, zawsze zbieżna, nie wymaga dzielenia.</li>
+<li><strong>Wady:</strong> zbieżność liniowa – ok. 1 bit (0,3 cyfry dziesiętnej) na krok, więc dla pełnej precyzji double potrzeba ok. 50–70 kroków zamiast kilku.</li></ul>
+</div>
+<figure class="code"><figcaption class="code-head"><span>Bisekcja</span><span class="lang">Pseudokod</span></figcaption><pre><code><span class="tok-k">FUNKCJA</span> <span class="tok-f">pierwiastek_bisekcja</span>(S, eps)
+    a ← <span class="tok-n">0</span>
+    b ← <span class="tok-f">max</span>(<span class="tok-n">1</span>, S)                <span class="tok-c">// √S leży w przedziale [a, b]</span>
+    <span class="tok-k">POWTARZAJ</span> <span class="tok-k">DOPÓKI</span> (b − a) &gt; eps · b
+        c ← (a + b) / <span class="tok-n">2</span>
+        <span class="tok-k">JEŻELI</span> c · c &gt; S <span class="tok-k">WTEDY</span> b ← c
+        <span class="tok-k">W PRZECIWNYM RAZIE</span> a ← c
+    <span class="tok-k">KONIEC</span>
+    <span class="tok-k">ZWRÓĆ</span> (a + b) / <span class="tok-n">2</span></code></pre></figure>
+
+<div class="prose">
+<h2 id="pisemna">2. Metoda pisemna (cyfra po cyfrze)</h2>
+<p>Algorytm znany ze szkoły i z chińskich „Dziewięciu rozdziałów”: liczbę dzielimy na pary cyfr od przecinka, a następnie w każdym kroku wyznaczamy jedną cyfrę wyniku <span class="m">d</span> – największą, dla której <span class="m">(20·p + d)·d</span> nie przekracza bieżącej reszty (<span class="m">p</span> to dotychczasowy wynik). W systemie dwójkowym cyfra może być tylko 0 lub 1, więc zostaje samo porównanie i odejmowanie – dlatego odmiany tej metody (np. <em>SRT</em>) są stosowane bezpośrednio w układach scalonych procesorów.</p>
+<p>Przykład: √1764 → pary „17|64”. Największa cyfra, której kwadrat ≤ 17, to 4 (reszta 1). Dopisujemy parę: 164. Szukamy d: (80 + d)·d ≤ 164 → d = 2. Wynik: 42, reszta 0.</p>
+
+<h2 id="odwrotny">3. Newton dla odwrotności pierwiastka</h2>
+<p>Dzielenie jest dla procesora kilka razy wolniejsze od mnożenia. Można więc szukać <span class="m">y</span> = 1/√<span class="m">S</span>, stosując metodę Newtona do funkcji <span class="m">f(y) = 1/y² − S</span>:</p>
+<div class="formula"><span class="m">y</span><sub>n+1</sub> = <span class="m">y</span><sub>n</sub> · <span class="frac"><span>3 − <span class="m">S</span> <span class="m">y</span><sub>n</sub>²</span><span>2</span></span> &emsp; oraz &emsp; √<span class="m">S</span> = <span class="m">S</span> · <span class="m">y</span></div>
+<p>Wzór zawiera wyłącznie mnożenia i odejmowania. Tę samą ideę wykorzystuje algorytm <strong>Goldschmidta</strong>, stosowany w jednostkach zmiennoprzecinkowych niektórych procesorów, oraz instrukcja <code>RSQRTSS</code> (przybliżony odwrotny pierwiastek) w procesorach x86.</p>
+
+<h2 id="quake">4. „Fast inverse square root” z gry Quake III</h2>
+<p>Słynna sztuczka z 1999 roku: bity liczby zmiennoprzecinkowej traktuje się jak liczbę całkowitą. Ponieważ wykładnik to w przybliżeniu logarytm dwójkowy liczby, przesunięcie bitów w prawo i odjęcie od stałej <code>0x5F3759DF</code> daje dobre pierwsze przybliżenie 1/√x. Potem wystarczy jeden krok metody Newtona.</p>
+</div>
+<figure class="code"><figcaption class="code-head"><span>Fragment kodu gry Quake III Arena (id Software, licencja GPL)</span><span class="lang">C</span></figcaption><pre><code>float Q_rsqrt(float number) {
+    long i;
+    float x2 = number * <span class="tok-n">0.</span>5F, y = number;
+    i = *(long *) &amp;y;                  <span class="tok-c">// bity liczby float jako liczba całkowita</span>
+    i = 0x5f3759df - (i &gt;&gt; <span class="tok-n">1</span>);         <span class="tok-c">// &quot;magiczne&quot; pierwsze przybliżenie</span>
+    y = *(float *) &amp;i;
+    y = y * (<span class="tok-n">1.</span>5F - (x2 * y * y));     <span class="tok-c">// jeden krok metody Newtona</span>
+    <span class="tok-k">return</span> y;                          <span class="tok-c">// ≈ 1/√number (błąd &lt; 0,2%)</span>
+}</code></pre></figure>
+
+<div class="prose">
+<h2 id="logarytmy">5. Logarytm i funkcja wykładnicza</h2>
+<p>Z własności potęg: √<span class="m">S</span> = <span class="m">S</span><sup>1/2</sup> = e<sup>½·ln S</sup>. W Pythonie można więc napisać <code>S ** 0.5</code> lub <code>math.exp(0.5 * math.log(S))</code>. Metoda jest wygodna, ale wolniejsza i mniej dokładna niż <code>sqrt()</code>, bo wymaga obliczenia dwóch funkcji przestępnych.</p>
+
+<h2 id="szereg">6. Szereg Taylora (dwumian Newtona)</h2>
+<p>Dla liczb bliskich 1 można użyć rozwinięcia:</p>
+<div class="formula">√(1 + <span class="m">t</span>) = 1 + <span class="frac"><span class="m">t</span><span>2</span></span> − <span class="frac"><span class="m">t</span>²<span>8</span></span> + <span class="frac"><span class="m">t</span>³<span>16</span></span> − <span class="frac"><span>5<span class="m">t</span>⁴</span><span>128</span></span> + … &emsp; (|<span class="m">t</span>| &lt; 1)</div>
+<p>Zbieżność jest wolna, jeśli <span class="m">t</span> nie jest małe, dlatego szeregi stosuje się głównie do obliczenia dobrego przybliżenia startowego (często z tablicy wartości) przed kilkoma krokami metody Newtona.</p>
+
+<h2 id="sprzet">7. Jak robi to procesor?</h2>
+<p>Funkcja <code>math.sqrt()</code> w Pythonie wywołuje funkcję <code>sqrt()</code> z biblioteki języka C, a kompilator zamienia ją na <strong>jedną instrukcję procesora</strong> – w architekturze x86-64 jest to <code>SQRTSD</code>. Układ scalony liczy pierwiastek sprzętowo (algorytm cyfra-po-cyfrze typu SRT lub iteracje Newtona/Goldschmidta z tablicą przybliżeń), zwracając wynik poprawnie zaokrąglony zgodnie z normą IEEE 754, w czasie kilkunastu cykli zegara (kilka nanosekund).</p>
+
+<h2 id="porownanie">Porównanie metod</h2>
+</div>
+<div class="table-wrap"><table>
+<thead><tr><th>Metoda</th><th>Rząd zbieżności</th><th>Operacje w kroku</th><th>Kroki do pełnej precyzji double*</th></tr></thead>
+<tbody>
+<tr><td>Babilońska (Herona / Newtona)</td><td>2 (kwadratowa)</td><td>dzielenie, dodawanie, mnożenie</td><td>4–6 (przy dobrym x₀)</td></tr>
+<tr><td>Bisekcja</td><td>1 (liniowa)</td><td>mnożenie, porównanie</td><td>ok. 53+</td></tr>
+<tr><td>Pisemna (cyfra po cyfrze)</td><td>1 (stała liczba cyfr)</td><td>odejmowanie, porównanie</td><td>1 bit na krok (53)</td></tr>
+<tr><td>Newton dla 1/√S</td><td>2 (kwadratowa)</td><td>tylko mnożenia</td><td>3–4 (z tablicą przybliżeń)</td></tr>
+<tr><td>Quake III</td><td>1 krok Newtona</td><td>operacje na bitach + mnożenia</td><td>– (wynik przybliżony, ok. 0,2%)</td></tr>
+<tr><td>exp(½·ln S)</td><td>–</td><td>dwie funkcje przestępne</td><td>–</td></tr>
+<tr><td>Instrukcja SQRTSD</td><td>sprzęt</td><td>1 instrukcja</td><td>1 (kilkanaście cykli)</td></tr>
+</tbody></table></div>
+<div class="prose"><p style="font-size:14px;color:var(--ink-3)">* orientacyjnie, dla liczby typu double (53 bity mantysy).</p></div>
+<nav class="pager" aria-label="Kolejne rozdziały"><a class="prev" href="metoda-babilonska.html"><small>← Poprzedni</small><span>Metoda babilońska</span></a><a class="next" href="implementacja.html"><small>Następny →</small><span>Implementacja</span></a></nav></div><aside class="toc" aria-label="Spis treści"><p>Na tej stronie</p><ol><li><a href="#bisekcja">Bisekcja</a></li><li><a href="#pisemna">Metoda pisemna</a></li><li><a href="#odwrotny">Odwrotny pierwiastek</a></li><li><a href="#quake">Quake III</a></li><li><a href="#logarytmy">Logarytmy</a></li><li><a href="#szereg">Szereg Taylora</a></li><li><a href="#sprzet">Procesor</a></li><li><a href="#porownanie">Porównanie</a></li></ol></aside></div>
+</div></main>
+<footer class="site-footer"><div class="container">
+<span>Projekt indywidualny: „Jak komputer oblicza pierwiastek kwadratowy?” · 2026</span>
+<span>HTML + CSS · programy w Pythonie · <a href="zrodla.html">źródła</a></span>
+</div></footer>
+</body>
+</html>

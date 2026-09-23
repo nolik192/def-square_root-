@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Historia · Pierwiastek kwadratowy</title>
+<meta name="description" content="Projekt: jak komputer oblicza pierwiastek kwadratowy – metoda babilońska (Herona), inne algorytmy i eksperyment porównujący wydajność z funkcją sqrt().">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231f3a5f'/%3E%3Ctext x='32' y='46' font-size='40' text-anchor='middle' fill='%23f7f4ee' font-family='Georgia'%3E%E2%88%9A%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#tresc">Przejdź do treści</a>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">√</span><span>Pierwiastek kwadratowy<small>od Babilonu do komputera</small></span></a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Pokaż menu">
+    <label for="nav-toggle" class="nav-button" aria-hidden="true"><span></span></label>
+    <nav class="site-nav" aria-label="Menu główne"><ul><li><a href="index.html">Strona główna</a></li><li><a href="historia.html" aria-current="page">Historia</a></li><li><a href="matematyka.html">Matematyka</a></li><li><a href="metoda-babilonska.html">Metoda babilońska</a></li><li><a href="inne-metody.html">Inne metody</a></li><li><a href="implementacja.html">Implementacja</a></li><li><a href="eksperyment.html">Eksperyment</a></li><li><a href="wyniki.html">Wyniki</a></li><li><a href="wnioski.html">Wnioski</a></li><li><a href="zrodla.html">Źródła</a></li></ul></nav>
+  </div>
+</header>
+<div class="page-hero"><div class="container"><span class="eyebrow">Rozdział 1</span><h1>Historia</h1><p class="lead">Ludzie obliczali pierwiastki na długo przed komputerami. Ten sam pomysł – uśredniać przybliżenia – przetrwał prawie 4000 lat i działa dziś w procesorach.</p></div></div>
+<main id="tresc" class="content"><div class="container">
+<div class="layout"><div class="prose-wrap">
+<div class="prose">
+<h2 id="wstep">Problem starszy niż algebra</h2>
+<p>Pierwiastek kwadratowy pojawia się naturalnie, gdy znamy <strong>pole kwadratu</strong> i chcemy poznać długość jego boku. Taki problem mieli już starożytni mierniczy, budowniczowie i urzędnicy dzielący pola. Ponieważ większość pierwiastków to liczby niewymierne, od początku trzeba było szukać <strong>przybliżeń</strong> – i sposobów ich systematycznego poprawiania.</p>
+
+<h2 id="os-czasu">Oś czasu</h2>
+<ol class="timeline">
+<li><span class="when">ok. 1800–1600 p.n.e.</span><h3>Babilon – tabliczka YBC 7289</h3>
+<p>Gliniana tabliczka z kolekcji Uniwersytetu Yale przedstawia kwadrat z przekątnymi. Przy przekątnej zapisano w systemie sześćdziesiątkowym liczbę <code>1;24,51,10</code>, czyli
+1 + 24/60 + 51/60² + 10/60³ ≈ <strong>1,41421296</strong>. Prawdziwa wartość √2 = 1,41421356… – błąd wynosi około 0,0000006! Babilończycy prawdopodobnie posługiwali się metodą uśredniania przybliżeń, dziś nazywaną ich imieniem.</p></li>
+<li><span class="when">ok. 800–200 p.n.e.</span><h3>Indie – Śulba Sutry</h3>
+<p>Teksty opisujące budowę ołtarzy ofiarnych podają przybliżenie √2 ≈ 1 + 1/3 + 1/(3·4) − 1/(3·4·34) = 577/408 ≈ 1,4142157. Ta sama liczba pojawia się jako trzeci krok metody babilońskiej rozpoczętej od 1.</p></li>
+<li><span class="when">ok. 300 p.n.e.</span><h3>Grecja – odkrycie niewymierności</h3>
+<p>Pitagorejczycy odkryli, że przekątnej kwadratu nie da się wyrazić stosunkiem dwóch liczb całkowitych. Dowód niewymierności √2 zachował się m.in. w „Elementach” Euklidesa. Oznaczało to, że pierwiastek można tylko przybliżać.</p></li>
+<li><span class="when">I w. n.e.</span><h3>Heron z Aleksandrii – „Metrica”</h3>
+<p>Heron jako pierwszy opisał metodę słowami, w postaci przepisu. Liczył √720: zaczynał od 27 (bo 27² = 729), dzielił 720 przez 27 i uśredniał wynik z dzielnikiem: (27 + 26⅔)/2 = 26⅚ ≈ 26,833. Dodał też, że dla większej dokładności proces należy powtarzać. Stąd druga nazwa – <strong>metoda Herona</strong>.</p></li>
+<li><span class="when">ok. I w. p.n.e. – I w. n.e.</span><h3>Chiny – „Dziewięć rozdziałów sztuki matematycznej”</h3>
+<p>Chińscy matematycy opisali algorytm obliczania pierwiastka cyfra po cyfrze (podobny do dzisiejszej metody pisemnej), wykonywany na liczydle z pałeczek.</p></li>
+<li><span class="when">1669 i 1690</span><h3>Isaac Newton i Joseph Raphson</h3>
+<p>Newton opracował metodę rozwiązywania równań przez kolejne przybliżenia, a Raphson podał jej prostszą, iteracyjną postać. Metoda Newtona–Raphsona zastosowana do równania x² − S = 0 daje dokładnie wzór babiloński – starożytny przepis okazał się szczególnym przypadkiem ogólnej metody.</p></li>
+<li><span class="when">1949</span><h3>Pierwsze komputery</h3>
+<p>Na maszynach takich jak EDSAC pierwiastki liczono programowo, właśnie metodą Newtona – każda operacja dzielenia była kosztowna, więc bardzo dbano o dobre przybliżenie początkowe.</p></li>
+<li><span class="when">1980</span><h3>Koprocesor Intel 8087</h3>
+<p>Pierwiastek kwadratowy trafił do sprzętu – instrukcja <code>FSQRT</code> liczy go bezpośrednio w układzie scalonym.</p></li>
+<li><span class="when">1985</span><h3>Norma IEEE 754</h3>
+<p>Standard arytmetyki zmiennoprzecinkowej wymaga, aby pierwiastek kwadratowy był liczony z <strong>poprawnym zaokrągleniem</strong> – czyli tak dokładnie, jak to tylko możliwe w danym formacie liczby. Z tej gwarancji korzysta dziś każda funkcja <code>sqrt()</code>.</p></li>
+<li><span class="when">1999</span><h3>Quake III Arena i „magiczna stała”</h3>
+<p>Gra słynie z funkcji szybko liczącej 1/√x za pomocą stałej <code>0x5F3759DF</code> i jednego kroku metody Newtona. Dziś to ciekawostka – nowoczesne procesory mają do tego osobne, szybsze instrukcje.</p></li>
+<li><span class="when">dziś</span><h3>Instrukcje SSE/AVX i układy GPU</h3>
+<p>Instrukcja <code>SQRTSD</code> w procesorach x86-64 oblicza pierwiastek liczby typu double w kilkunastu cyklach zegara. Wewnątrz sprzęt używa algorytmów cyfra-po-cyfrze lub iteracji typu Newtona/Goldschmidta – czyli potomków metody babilońskiej.</p></li>
+</ol>
+
+<div class="note warm"><span class="note-title">Ciekawostka</span>
+<p>Symbol √ pochodzi prawdopodobnie od zniekształconej litery „r” (łac. <em>radix</em> – korzeń). Po raz pierwszy wydrukował go Christoph Rudolff w 1525 roku, a poziomą kreskę nad liczbą dodał Kartezjusz w 1637 roku.</p></div>
+</div>
+<nav class="pager" aria-label="Kolejne rozdziały"><a class="prev" href="index.html"><small>← Poprzedni</small><span>Strona główna</span></a><a class="next" href="matematyka.html"><small>Następny →</small><span>Podstawy matematyczne</span></a></nav></div><aside class="toc" aria-label="Spis treści"><p>Na tej stronie</p><ol><li><a href="#wstep">Problem starszy niż algebra</a></li><li><a href="#os-czasu">Oś czasu</a></li></ol></aside></div>
+</div></main>
+<footer class="site-footer"><div class="container">
+<span>Projekt indywidualny: „Jak komputer oblicza pierwiastek kwadratowy?” · 2026</span>
+<span>HTML + CSS · programy w Pythonie · <a href="zrodla.html">źródła</a></span>
+</div></footer>
+</body>
+</html>

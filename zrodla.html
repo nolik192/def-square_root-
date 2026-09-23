@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Źródła · Pierwiastek kwadratowy</title>
+<meta name="description" content="Projekt: jak komputer oblicza pierwiastek kwadratowy – metoda babilońska (Herona), inne algorytmy i eksperyment porównujący wydajność z funkcją sqrt().">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231f3a5f'/%3E%3Ctext x='32' y='46' font-size='40' text-anchor='middle' fill='%23f7f4ee' font-family='Georgia'%3E%E2%88%9A%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#tresc">Przejdź do treści</a>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">√</span><span>Pierwiastek kwadratowy<small>od Babilonu do komputera</small></span></a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Pokaż menu">
+    <label for="nav-toggle" class="nav-button" aria-hidden="true"><span></span></label>
+    <nav class="site-nav" aria-label="Menu główne"><ul><li><a href="index.html">Strona główna</a></li><li><a href="historia.html">Historia</a></li><li><a href="matematyka.html">Matematyka</a></li><li><a href="metoda-babilonska.html">Metoda babilońska</a></li><li><a href="inne-metody.html">Inne metody</a></li><li><a href="implementacja.html">Implementacja</a></li><li><a href="eksperyment.html">Eksperyment</a></li><li><a href="wyniki.html">Wyniki</a></li><li><a href="wnioski.html">Wnioski</a></li><li><a href="zrodla.html" aria-current="page">Źródła</a></li></ul></nav>
+  </div>
+</header>
+<div class="page-hero"><div class="container"><span class="eyebrow">Rozdział 9</span><h1>Źródła</h1><p class="lead">Literatura, dokumentacja i materiały, z których korzystano przy tworzeniu projektu.</p></div></div>
+<main id="tresc" class="content"><div class="container">
+<div class="layout"><div class="prose-wrap">
+<div class="prose">
+<h2 id="literatura">Literatura i artykuły</h2>
+<ol class="sources">
+<li>D. Fowler, E. Robson, <em>Square Root Approximations in Old Babylonian Mathematics: YBC 7289 in Context</em>, Historia Mathematica 25 (1998), s. 366–378.</li>
+<li>Heron z Aleksandrii, <em>Metrica</em>, ks. I, rozdz. 8 (ok. 60 n.e.) – opis obliczenia √720.</li>
+<li>D. Goldberg, <em>What Every Computer Scientist Should Know About Floating-Point Arithmetic</em>, ACM Computing Surveys 23(1), 1991.</li>
+<li>Z. Fortuna, B. Macukow, J. Wąsowski, <em>Metody numeryczne</em>, Wydawnictwa Naukowo-Techniczne, Warszawa.</li>
+<li>D. E. Knuth, <em>Sztuka programowania</em>, t. 2: <em>Algorytmy seminumeryczne</em>, WNT.</li>
+<li>C. Lomont, <em>Fast Inverse Square Root</em>, Purdue University, 2003.</li>
+<li>IEEE Standard for Floating-Point Arithmetic, <em>IEEE 754-2019</em>.</li>
+</ol>
+
+<h2 id="internet">Źródła internetowe</h2>
+<ol class="sources" style="counter-reset: src 7">
+<li><a href="https://en.wikipedia.org/wiki/Methods_of_computing_square_roots">Methods of computing square roots</a> – Wikipedia (dostęp: wrzesień 2026).</li>
+<li><a href="https://pl.wikipedia.org/wiki/Metoda_Newtona">Metoda Newtona</a> – Wikipedia, wolna encyklopedia.</li>
+<li><a href="https://en.wikipedia.org/wiki/YBC_7289">YBC 7289</a> – Wikipedia; zdjęcia tabliczki: Yale Babylonian Collection.</li>
+<li><a href="https://en.wikipedia.org/wiki/Fast_inverse_square_root">Fast inverse square root</a> – Wikipedia.</li>
+<li><a href="https://docs.python.org/3/library/math.html#math.sqrt">Dokumentacja Pythona: moduł math</a> – funkcje <code>sqrt()</code> i <code>isqrt()</code>.</li>
+<li><a href="https://docs.python.org/3/library/time.html#time.perf_counter">Dokumentacja Pythona: time.perf_counter()</a>.</li>
+<li><a href="https://en.cppreference.com/w/cpp/numeric/math/sqrt">cppreference.com: std::sqrt</a>.</li>
+<li><a href="https://support.microsoft.com/pl-pl/office/pierwiastek-funkcja-654975c2-05c4-4831-9a24-2c65e4040fdf">Microsoft Support: funkcja PIERWIASTEK</a>.</li>
+<li><a href="https://matplotlib.org/">Matplotlib</a> i <a href="https://openpyxl.readthedocs.io/">openpyxl</a> – biblioteki użyte do wykresów i arkusza.</li>
+</ol>
+
+<h2 id="narzedzia">Narzędzia</h2>
+<ul>
+<li>Strona: HTML5 i CSS3 (bez bibliotek zewnętrznych; czcionki Fraunces, Inter i JetBrains Mono z Google Fonts).</li>
+<li>Programy: Python 3 (moduły <code>math</code>, <code>time</code>, <code>csv</code>, <code>json</code>; <code>matplotlib</code>, <code>openpyxl</code>).</li>
+<li>Arkusz: Microsoft Excel / LibreOffice Calc.</li>
+</ul>
+</div>
+<nav class="pager" aria-label="Kolejne rozdziały"><a class="prev" href="wnioski.html"><small>← Poprzedni</small><span>Wnioski</span></a></nav></div><aside class="toc" aria-label="Spis treści"><p>Na tej stronie</p><ol><li><a href="#literatura">Literatura</a></li><li><a href="#internet">Internet</a></li><li><a href="#narzedzia">Narzędzia</a></li></ol></aside></div>
+</div></main>
+<footer class="site-footer"><div class="container">
+<span>Projekt indywidualny: „Jak komputer oblicza pierwiastek kwadratowy?” · 2026</span>
+<span>HTML + CSS · programy w Pythonie · <a href="zrodla.html">źródła</a></span>
+</div></footer>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pierwiastek kwadratowy – od Babilonu do komputera</title>
+<meta name="description" content="Projekt: jak komputer oblicza pierwiastek kwadratowy – metoda babilońska (Herona), inne algorytmy i eksperyment porównujący wydajność z funkcją sqrt().">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231f3a5f'/%3E%3Ctext x='32' y='46' font-size='40' text-anchor='middle' fill='%23f7f4ee' font-family='Georgia'%3E%E2%88%9A%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<a class="skip-link" href="#tresc">Przejdź do treści</a>
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">√</span><span>Pierwiastek kwadratowy<small>od Babilonu do komputera</small></span></a>
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Pokaż menu">
+    <label for="nav-toggle" class="nav-button" aria-hidden="true"><span></span></label>
+    <nav class="site-nav" aria-label="Menu główne"><ul><li><a href="index.html" aria-current="page">Strona główna</a></li><li><a href="historia.html">Historia</a></li><li><a href="matematyka.html">Matematyka</a></li><li><a href="metoda-babilonska.html">Metoda babilońska</a></li><li><a href="inne-metody.html">Inne metody</a></li><li><a href="implementacja.html">Implementacja</a></li><li><a href="eksperyment.html">Eksperyment</a></li><li><a href="wyniki.html">Wyniki</a></li><li><a href="wnioski.html">Wnioski</a></li><li><a href="zrodla.html">Źródła</a></li></ul></nav>
+  </div>
+</header>
+
+<main id="tresc" class="content"><div class="container">
+
+<section class="hero">
+<div class="hero-grid">
+<div>
+<span class="eyebrow">Projekt · matematyka + informatyka</span>
+<h1>Jak komputer oblicza <em>pierwiastek kwadratowy?</em></h1>
+<p class="lead">Od glinianej tabliczki z Babilonu do instrukcji procesora. Poznaj metodę babilońską (Herona), zobacz jej implementację w Pythonie, C++ i Excelu, a potem sprawdź w eksperymencie, jak wypada w porównaniu z funkcją <code>sqrt()</code>.</p>
+<div class="actions">
+<a class="btn primary" href="metoda-babilonska.html">Poznaj metodę babilońską →</a>
+<a class="btn ghost" href="wyniki.html">Zobacz wyniki eksperymentu</a>
+</div>
+</div>
+<div class="hero-panel" aria-label="Przykład: pierwiastek z 2">
+<div class="formula"><span class="m">x</span><sub>n+1</sub> = <span class="frac"><span>1</span><span>2</span></span>(<span class="m">x</span><sub>n</sub> + <span class="frac"><span class="m">S</span><span><span class="m">x</span><sub>n</sub></span></span>)</div>
+<ul class="iter-list">
+<li><span class="k">x₀</span><span>1,000000000000000</span></li>
+<li><span class="k">x₁</span><span>1,500000000000000</span></li>
+<li><span class="k">x₂</span><span><b>1,41</b>6666666666667</span></li>
+<li><span class="k">x₃</span><span><b>1,41421</b>5686274510</span></li>
+<li><span class="k">x₄</span><span><b>1,41421356237</b>4690</span></li>
+<li><span class="k">x₅</span><span class="ok">1,414213562373095 ✓</span></li>
+</ul>
+</div>
+</div>
+</section>
+
+<div class="stats">
+<div class="stat accent"><div class="value">29,5×</div><div class="label">tyle razy dłużej trwało obliczenie miliona pierwiastków metodą babilońską niż funkcją <code>math.sqrt()</code></div></div>
+<div class="stat"><div class="value">1,03 s</div><div class="label">średni czas miliona obliczeń metodą babilońską (Python)</div></div>
+<div class="stat"><div class="value">0,035 s</div><div class="label">średni czas miliona obliczeń funkcją biblioteczną <code>sqrt()</code></div></div>
+<div class="stat"><div class="value">≈ 14,8</div><div class="label">średnia liczba iteracji potrzebna do uzyskania 15 cyfr dokładności</div></div>
+</div>
+
+<h2>Cel projektu</h2>
+<div class="prose">
+<p>Pierwiastek kwadratowy pojawia się wszędzie: w twierdzeniu Pitagorasa, przy liczeniu odległości w grach komputerowych, w statystyce (odchylenie standardowe), w fizyce i grafice 3D. Wpisując w kalkulatorze <code>√2</code>, dostajemy wynik natychmiast – ale jak właściwie maszyna go wyznacza, skoro <span class="m">√2</span> ma nieskończenie wiele cyfr po przecinku?</p>
+<p>Celem projektu jest poznanie numerycznych sposobów obliczania pierwiastka kwadratowego oraz sprawdzenie w praktyce, jak zachowują się podczas bardzo dużej liczby obliczeń. Szczególny nacisk położono na <strong>metodę babilońską</strong> (metodę Herona) i jej porównanie z biblioteczną funkcją <code>sqrt()</code>.</p>
+</div>
+
+<div class="section-title"><h2>Zawartość strony</h2></div>
+<div class="grid cols-3">
+<a class="card" href="historia.html"><span class="num">01</span><h3>Historia</h3><p>Tabliczka YBC 7289, Heron z Aleksandrii, Newton i pierwsze komputery.</p><span class="more">Czytaj →</span></a>
+<a class="card" href="matematyka.html"><span class="num">02</span><h3>Podstawy matematyczne</h3><p>Definicja pierwiastka, liczby niewymierne, błąd przybliżenia i liczby zmiennoprzecinkowe.</p><span class="more">Czytaj →</span></a>
+<a class="card" href="metoda-babilonska.html"><span class="num">03</span><h3>Metoda babilońska</h3><p>Idea geometryczna, wyprowadzenie wzoru, dowód zbieżności i przykład.</p><span class="more">Czytaj →</span></a>
+<a class="card" href="inne-metody.html"><span class="num">04</span><h3>Inne metody</h3><p>Bisekcja, metoda pisemna, odwrotny pierwiastek i „magiczna stała” z Quake III.</p><span class="more">Czytaj →</span></a>
+<a class="card" href="implementacja.html"><span class="num">05</span><h3>Implementacja</h3><p>Pseudokod, Python, C++ i arkusz kalkulacyjny Excel.</p><span class="more">Czytaj →</span></a>
+<a class="card" href="eksperyment.html"><span class="num">06</span><h3>Eksperyment</h3><p>Milion pierwiastków, pięć pomiarów, dwie metody – jak mierzyliśmy czas.</p><span class="more">Czytaj →</span></a>
+<a class="card" href="wyniki.html"><span class="num">07</span><h3>Wyniki</h3><p>Tabela pomiarów, wykresy, dokładność i liczba iteracji.</p><span class="more">Czytaj →</span></a>
+<a class="card" href="wnioski.html"><span class="num">08</span><h3>Wnioski</h3><p>Dlaczego funkcja biblioteczna wygrywa i czego uczy nas metoda babilońska.</p><span class="more">Czytaj →</span></a>
+<a class="card" href="zrodla.html"><span class="num">09</span><h3>Źródła</h3><p>Literatura, artykuły i dokumentacja wykorzystane w projekcie.</p><span class="more">Czytaj →</span></a>
+</div>
+
+<h2>Elementy projektu</h2>
+<div class="grid cols-2">
+<div class="card"><h3>Strona internetowa</h3><p>Wykonana w czystym HTML i CSS, responsywna (telefon, tablet, komputer), z trybem ciemnym zależnym od ustawień systemu.</p></div>
+<div class="card"><h3>Programy w Pythonie</h3><p><code>program/babilonska.py</code> – implementacja metody, <code>program/benchmark.py</code> – eksperyment, <code>program/wykresy.py</code> – wykresy, <code>program/excel_generator.py</code> – arkusz Excel.</p></div>
+<div class="card"><h3>Arkusz kalkulacyjny</h3><p>Plik <a href="excel/metoda_babilonska.xlsx">metoda_babilonska.xlsx</a> z metodą babilońską zapisaną formułami Excela.</p></div>
+<div class="card"><h3>Eksperyment i analiza</h3><p>Pięciokrotny pomiar czasu serii 1 000 000 obliczeń, tabela, wykresy oraz wnioski.</p></div>
+</div>
+<nav class="pager" aria-label="Kolejne rozdziały"><a class="next" href="historia.html"><small>Następny →</small><span>Historia</span></a></nav>
+</div></main>
+<footer class="site-footer"><div class="container">
+<span>Projekt indywidualny: „Jak komputer oblicza pierwiastek kwadratowy?” · 2026</span>
+<span>HTML + CSS · programy w Pythonie · <a href="zrodla.html">źródła</a></span>
+</div></footer>
+</body>
+</html>

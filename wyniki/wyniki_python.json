@@ -1,0 +1,74 @@
+{
+  "jezyk": "Python 3.11.15",
+  "system": "Linux x86_64",
+  "proby": [
+    {
+      "proba": 1,
+      "sqrt": 0.034716813000002844,
+      "babilonska": 1.0111584999999934
+    },
+    {
+      "proba": 2,
+      "sqrt": 0.033737419999994245,
+      "babilonska": 1.0352929320000044
+    },
+    {
+      "proba": 3,
+      "sqrt": 0.034213762000007364,
+      "babilonska": 1.0255287890000062
+    },
+    {
+      "proba": 4,
+      "sqrt": 0.036908183999997846,
+      "babilonska": 1.0123345030000053
+    },
+    {
+      "proba": 5,
+      "sqrt": 0.034772532000005185,
+      "babilonska": 1.0582289230000015
+    }
+  ],
+  "srednia": {
+    "sqrt": 0.0348697422000015,
+    "babilonska": 1.0285087294000022
+  },
+  "dokladnosc": {
+    "max_blad_bezwzgledny": 1.1368683772161603e-13,
+    "max_blad_wzgledny": 2.2204206386980958e-16,
+    "identyczne_wyniki": 750888,
+    "iteracje": [
+      {
+        "n": 1,
+        "iteracje": 1
+      },
+      {
+        "n": 2,
+        "iteracje": 6
+      },
+      {
+        "n": 10,
+        "iteracje": 7
+      },
+      {
+        "n": 100,
+        "iteracje": 9
+      },
+      {
+        "n": 1000,
+        "iteracje": 11
+      },
+      {
+        "n": 10000,
+        "iteracje": 12
+      },
+      {
+        "n": 100000,
+        "iteracje": 14
+      },
+      {
+        "n": 1000000,
+        "iteracje": 16
+      }
+    ]
+  }
+}
